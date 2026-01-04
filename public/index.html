@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
+<title>Tifun-tedo</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #faf6f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+img{
+  border-radius: 50px;
+  width: 100px;
+  height: 100px;
+}
+.card {
+  background: white;
+  width: 350px;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.icon {
+  background: #d46a3a;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+h1 { text-align: center; }
+.subtitle { text-align: center; color: gray; }
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+input:focus { border: #d46a3a; background: #fff4ee; }
+.slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.slot:active { border-color: #d46a3a; background: #fff4ee; }
+.slot {
+  border: 2px solid #ddd;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+.section-title { margin-top: 20px; font-weight: bold; }
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+.counter button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  background: #eee;
+}
+.counter span { font-size: 18px; width: 30px; text-align: center; }
+.summary {
+  background: #f6f2ef;
+  padding: 15px;
+  border-radius: 12px;
+  margin: 15px 0;
+}
+.confirm-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to right, #c24d2c, #e37a3f);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.confirm-btn:hover { background: linear-gradient(to right, #e37a3f, #c24d2c); }
+.confirm-btn:active { transform: scale(0.98); }
+#booking-confermation{
+  width: 90%;
+  padding: 20px;
+  background: linear-gradient(to left, #d2502b, #e07b40);
+  margin:10px 2px;
+  border-radius: 20px;
+  text-align: center;
+}
+.input{ border: none; }
+.reset{
+  background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+</style>
+</head>
+<body>
+<form action="#">
+<div class="card">
+  <div class="icon"><img src="Screenshot 2025-12-28 085733.jpg" alt="#"></div>
+
+  <h1>Tifun-tedo</h1>
+  <p class="subtitle">Reserve your perfect slot</p>
+
+  <label>Your Name</label>
+  <input type="text" placeholder="Enter your name" minlength="3" required pattern="[a-zA-Z\s]+" />
+  <input type="reset" class="reset" />
+
+  <label>Select Slot Type</label>
+  <div class="slots">
+    <div class="slot" onclick="selectSlot('quarter')">Quarter</div>
+    <div class="slot" onclick="selectSlot('half')">Half</div>
+    <div class="slot" onclick="selectSlot('full')">Full</div>
+    <div class="slot"><input type="number" max="800" class="input" placeholder="Other quantity"></div>
+  </div>
+
+  <label class="section-title">Number of Slots</label>
+  <div class="counter">
+    <button id="minus" type="button">−</button>
+    <span id="count">1</span>
+    <button id="plus" type="button">+</button>
+  </div>
+
+  <div class="summary">
+    <strong>Booking Summary</strong>
+    <p id="summaryText-quarter">0 × Quarter Slot</p>
+    <p id="summaryText-half">0 × Half Slot</p>
+    <p id="summaryText-full">0 × Full Slot</p>
+  </div>
+
+  <button class="confirm-btn">Confirm Booking</button>
+  <p id="booking-confermation">Select your desired slot</p>
+</div>
+</form>
+
+<script>
+const full = document.getElementById("summaryText-full");
+const half = document.getElementById("summaryText-half");
+const quarter = document.getElementById("summaryText-quarter");
+const count = document.getElementById("count");
+const minus = document.getElementById("minus");
+const plus = document.getElementById("plus");
+const reset = document.querySelector('.reset');
+
+let currentSlot = null;
+let bookingNumber = 1;
+
+function updateCountDisplay() {
+  count.innerHTML = bookingNumber;
+  if (currentSlot === 'quarter') quarter.innerHTML = `${bookingNumber} × Quarter Slot`;
+  if (currentSlot === 'half') half.innerHTML = `${bookingNumber} × Half Slot`;
+  if (currentSlot === 'full') full.innerHTML = `${bookingNumber} × Full Slot`;
+}
+
+function selectSlot(slot) {
+  currentSlot = slot;
+  bookingNumber = 1;
+  updateCountDisplay();
+}
+
+plus.onclick = () => { bookingNumber++; updateCountDisplay(); }
+minus.onclick = () => { if (bookingNumber > 1) { bookingNumber--; updateCountDisplay(); } }
+
+reset.onclick = () => {
+  bookingNumber = 1;
+  currentSlot = null;
+  count.innerHTML = 1;
+  full.innerHTML = '0 × Full Slot';
+  half.innerHTML = '0 × Half Slot';
+  quarter.innerHTML = '0 × Quarter Slot';
+}
+
+document.querySelector('.confirm-btn').onclick = async function(e) {
+  e.preventDefault();
+
+  const bookingConfermation = document.querySelector('#booking-confermation');
+  const nameInput = document.querySelector('input[type="text"]').value.trim();
+  const otherInput = Number(document.querySelector('.input').value) || 0;
+
+  const quarterCount = Number(quarter.innerHTML.charAt(0));
+  const halfCount = Number(half.innerHTML.charAt(0));
+  const fullCount = Number(full.innerHTML.charAt(0));
+  const total = quarterCount * 3000 + halfCount * 6000 + fullCount * 12000 + otherInput;
+
+  if (!nameInput || total <= 0) {
+    bookingConfermation.innerHTML = "Please enter your name and select a slot";
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/book", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: nameInput,
+        quarter: quarterCount,
+        half: halfCount,
+        full: fullCount,
+        total
+      })
+    });
+
+    const data = await response.json();
+    bookingConfermation.innerHTML = `${data.message} — Total: ₦${total}`;
+
+    // Reset display
+    full.innerHTML = '0 × Full Slot';
+    half.innerHTML = '0 × Half Slot';
+    quarter.innerHTML = '0 × Quarter Slot';
+    count.innerHTML = 1;
+    bookingNumber = 1;
+    currentSlot = null;
+    document.querySelector('.input').value = '';
+    document.querySelector('input[type="text"]').value = '';
+  } catch (err) {
+    bookingConfermation.innerHTML = "Error connecting to server";
+    console.error(err);
+  }
+};
+</script>
+</body>
+</html>
