@@ -8,7 +8,11 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["express", "mongodb", "booking"],
+  "keywords": [
+    "express",
+    "mongodb",
+    "booking"
+  ],
   "author": "Ligali Taariq",
   "license": "ISC",
   "type": "commonjs",
@@ -19,6 +23,6 @@
     "mongoose": "^9.1.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.1.11"
   }
 }
