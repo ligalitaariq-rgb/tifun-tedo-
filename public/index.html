@@ -477,7 +477,7 @@ document.querySelector('.confirm-btn').onclick = async function(e) {
   const quarterCount = Number(quarter.innerHTML.charAt(0));
   const halfCount    = Number(half.innerHTML.charAt(0));
   const fullCount    = Number(full.innerHTML.charAt(0));
-  const total = quarterCount * 3000 + halfCount * 6000 + fullCount * 12000 + otherInput;
+  const total = quarterCount * 3250 + halfCount * 6500 + fullCount * 13000 + otherInput;
 
   if (!nameInput || total <= 0) {
     bookingConfermation.innerHTML = "Please enter your name and select a slot";
