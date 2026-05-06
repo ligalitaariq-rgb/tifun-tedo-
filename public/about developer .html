@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Developer | Ligali Taariq</title>
+    <link rel="icon" href="T-square.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* Animated Background Elements */
+        .bg-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212, 106, 58, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            filter: blur(50px);
+            animation: moveGlow 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveGlow {
+            0% { transform: translate(-50%, -50%); }
+            100% { transform: translate(50%, 50%); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 800px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-img-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #d46a3a;
+            object-fit: cover;
+            box-shadow: 0 0 30px rgba(212, 106, 58, 0.4);
+        }
+
+        .profile-img-container::after {
+            content: '';
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border: 2px dashed rgba(212, 106, 58, 0.3);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #fff, #f0a060);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nickname {
+            color: #d46a3a;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .bio {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .skill-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background: rgba(212, 106, 58, 0.1);
+            transform: translateY(-5px);
+            border-color: rgba(212, 106, 58, 0.3);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .skill-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #f0a060;
+        }
+
+        .skill-item p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.4;
+        }
+
+        .back-btn {
+            margin-top: 40px;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #c24d2c, #e37a3f);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(194, 77, 44, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(194, 77, 44, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .profile-card { padding: 30px 20px; }
+            h1 { font-size: 1.8rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-img-container">
+                <img src="T-square.jpg" alt="Ligali Taariq" class="profile-img">
+            </div>
+            
+            <h1>LIGALI TAARIQ</h1>
+            <div class="nickname">(T-square)</div>
+            
+            <p class="bio">
+                A Mechanical Engineering student & practitioner, Web Developer, and Graphic Designer. 
+                I am passionate about building seamless solutions that bridge the gap between 
+                digital interfaces and physical systems.
+            </p>
+            
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <span class="skill-icon">💻</span>
+                    <h3>Web Developer</h3>
+                    <p>Crafting modern, responsive, and highly interactive web applications.</p>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-icon">⚙️</span>
+                    <h3>Mechanical Engineer</h3>
+                    <p>Applying engineering principles to solve complex real-world mechanical problems.</p>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-icon">🎨</span>
+                    <h3>Graphic Designer</h3>
+                    <p>Creating visually compelling designs that tell a story and engage users.</p>
+                </div>
+            </div>
+            
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
