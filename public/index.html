@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,61 +6,166 @@
 <link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
 <title>Tifun-tedo</title>
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: Arial, sans-serif;
-  background: #faf6f3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+  display: block;
+  width: 100%;
   height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  padding: 20px 0;
 }
-img{
+
+/* ===================== ANIMATED BACKGROUND ===================== */
+.bg-animation {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-item {
+  position: absolute;
+  bottom: -120px;
+  font-size: 48px;
+  opacity: 0;
+  animation: floatUp linear infinite;
+  filter: drop-shadow(0 0 8px rgba(212, 106, 58, 0.4));
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg) scale(0.8);   opacity: 0; }
+  10%  { opacity: 0.35; }
+  80%  { opacity: 0.25; }
+  100% { transform: translateY(-110vh) rotate(360deg) scale(1.1); opacity: 0; }
+}
+
+.bg-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s;   font-size: 40px; }
+.bg-item:nth-child(2)  { left: 12%; animation-duration: 12s; animation-delay: 1.5s; font-size: 55px; }
+.bg-item:nth-child(3)  { left: 22%; animation-duration: 10s; animation-delay: 0.8s; font-size: 38px; }
+.bg-item:nth-child(4)  { left: 30%; animation-duration: 14s; animation-delay: 3s;   font-size: 50px; }
+.bg-item:nth-child(5)  { left: 42%; animation-duration: 8s;  animation-delay: 2s;   font-size: 44px; }
+.bg-item:nth-child(6)  { left: 53%; animation-duration: 11s; animation-delay: 0.4s; font-size: 36px; }
+.bg-item:nth-child(7)  { left: 63%; animation-duration: 13s; animation-delay: 4s;   font-size: 52px; }
+.bg-item:nth-child(8)  { left: 72%; animation-duration: 9.5s;animation-delay: 1s;   font-size: 42px; }
+.bg-item:nth-child(9)  { left: 82%; animation-duration: 12s; animation-delay: 2.5s; font-size: 46px; }
+.bg-item:nth-child(10) { left: 91%; animation-duration: 10s; animation-delay: 3.5s; font-size: 40px; }
+.bg-item:nth-child(11) { left: 18%; animation-duration: 15s; animation-delay: 5s;   font-size: 34px; }
+.bg-item:nth-child(12) { left: 47%; animation-duration: 11s; animation-delay: 6s;   font-size: 58px; }
+.bg-item:nth-child(13) { left: 68%; animation-duration: 8.5s;animation-delay: 0.2s; font-size: 32px; }
+.bg-item:nth-child(14) { left: 36%; animation-duration: 13s; animation-delay: 7s;   font-size: 48px; }
+.bg-item:nth-child(15) { left: 78%; animation-duration: 9s;  animation-delay: 4.5s; font-size: 44px; }
+
+/* Sparkle/star particles */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #e37a3f;
+  border-radius: 50%;
+  animation: sparkleFloat linear infinite;
+  opacity: 0;
+}
+@keyframes sparkleFloat {
+  0%   { transform: translateY(0) scale(0); opacity: 0; }
+  20%  { opacity: 0.7; transform: scale(1); }
+  80%  { opacity: 0.3; }
+  100% { transform: translateY(-90vh) scale(0.2); opacity: 0; }
+}
+.sparkle:nth-child(1)  { left: 8%;  bottom: -10px; animation-duration: 7s;  animation-delay: 0.5s;  background: #f0a060; width: 5px; height: 5px; }
+.sparkle:nth-child(2)  { left: 25%; bottom: -10px; animation-duration: 9s;  animation-delay: 2s;    background: #d46a3a; width: 7px; height: 7px; }
+.sparkle:nth-child(3)  { left: 50%; bottom: -10px; animation-duration: 6s;  animation-delay: 1s;    background: #ffcc88; width: 4px; height: 4px; }
+.sparkle:nth-child(4)  { left: 70%; bottom: -10px; animation-duration: 10s; animation-delay: 3.5s;  background: #e37a3f; width: 6px; height: 6px; }
+.sparkle:nth-child(5)  { left: 88%; bottom: -10px; animation-duration: 8s;  animation-delay: 0.8s;  background: #f0a060; width: 5px; height: 5px; }
+.sparkle:nth-child(6)  { left: 38%; bottom: -10px; animation-duration: 11s; animation-delay: 4.2s;  background: #c24d2c; width: 8px; height: 8px; }
+
+/* ===================== CARD ===================== */
+.card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.97);
+  width: 360px;
+  max-width: 90%;
+  padding: 28px 25px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,150,80,0.15);
+  backdrop-filter: blur(4px);
+  margin: 30px auto;
+}
+
+img {
   border-radius: 50px;
   width: 100px;
   height: 100px;
 }
-.card {
-  background: white;
-  width: 350px;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
 .icon {
   background: #d46a3a;
   color: white;
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
+  box-shadow: 0 4px 16px rgba(212,106,58,0.4);
 }
-h1 { text-align: center; }
-.subtitle { text-align: center; color: gray; }
-input {
+h1 { text-align: center; color: #2d0d00; margin-top: 10px; }
+.subtitle { text-align: center; color: #888; margin-bottom: 12px; }
+
+label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-top: 14px; margin-bottom: 4px; }
+
+input[type="text"], input[type="number"] {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1.5px solid #ddd;
+  font-size: 14px;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
 }
-input:focus { border: #d46a3a; background: #fff4ee; }
+input[type="text"]:focus, input[type="number"]:focus {
+  border-color: #d46a3a;
+  background: #fff4ee;
+}
+
 .slots {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  margin-top: 6px;
 }
-.slot:active { border-color: #d46a3a; background: #fff4ee; }
 .slot {
   border: 2px solid #ddd;
-  padding: 15px;
+  padding: 14px;
   border-radius: 12px;
   text-align: center;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  color: #555;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
 }
-.section-title { margin-top: 20px; font-weight: bold; }
+.slot:hover  { border-color: #d46a3a; background: #fff4ee; color: #c24d2c; }
+.slot:active { border-color: #c24d2c; background: #ffe8d8; }
+.slot .input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  outline: none;
+  color: #555;
+}
+
+.section-title { margin-top: 20px; font-weight: bold; font-size: 13px; color: #555; }
+
 .counter {
   display: flex;
   align-items: center;
@@ -72,18 +176,25 @@ input:focus { border: #d46a3a; background: #fff4ee; }
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  border: none;
+  border: 1.5px solid #ddd;
   font-size: 20px;
   cursor: pointer;
-  background: #eee;
+  background: #f5f5f5;
+  transition: background 0.2s;
 }
-.counter span { font-size: 18px; width: 30px; text-align: center; }
+.counter button:hover { background: #ffe0cc; border-color: #d46a3a; }
+.counter span { font-size: 20px; font-weight: 700; width: 30px; text-align: center; color: #c24d2c; }
+
 .summary {
-  background: #f6f2ef;
+  background: linear-gradient(135deg, #fff4ee, #ffeedd);
   padding: 15px;
   border-radius: 12px;
   margin: 15px 0;
+  border: 1px solid #f5c9a8;
 }
+.summary strong { color: #7a2e10; font-size: 13px; }
+.summary p { font-size: 13px; color: #666; margin-top: 4px; }
+
 .confirm-btn {
   width: 100%;
   padding: 15px;
@@ -92,34 +203,73 @@ input:focus { border: #d46a3a; background: #fff4ee; }
   border: none;
   border-radius: 14px;
   font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s, transform 0.1s;
 }
-.confirm-btn:hover { background: linear-gradient(to right, #e37a3f, #c24d2c); }
+.confirm-btn:hover  { opacity: 0.92; }
 .confirm-btn:active { transform: scale(0.98); }
-#booking-confermation{
-  width: 90%;
-  padding: 20px;
+
+#booking-confermation {
+  width: 100%;
+  padding: 14px 16px;
   background: linear-gradient(to left, #d2502b, #e07b40);
-  margin:10px 2px;
-  border-radius: 20px;
+  margin: 12px 0 0;
+  border-radius: 14px;
   text-align: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
 }
-.input{ border: none; }
-.reset{
+
+.reset {
   background-color: #f44336;
   border: none;
   color: white;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 8px 18px;
+  font-size: 14px;
   cursor: pointer;
-  border-radius: 12px;
+  border-radius: 10px;
+  margin-top: 6px;
+  transition: background 0.2s;
 }
+.reset:hover { background-color: #d32f2f; }
 </style>
 </head>
 <body>
+
+<!-- ANIMATED BACKGROUND -->
+<div class="bg-animation">
+  <!-- Food & celebration emojis floating up -->
+  <div class="bg-item">🍖</div>
+  <div class="bg-item">🍗</div>
+  <div class="bg-item">🥘</div>
+  <div class="bg-item">🎉</div>
+  <div class="bg-item">🍽️</div>
+  <div class="bg-item">🥩</div>
+  <div class="bg-item">🎊</div>
+  <div class="bg-item">🍛</div>
+  <div class="bg-item">🥗</div>
+  <div class="bg-item">🍖</div>
+  <div class="bg-item">✨</div>
+  <div class="bg-item">🎈</div>
+  <div class="bg-item">🍗</div>
+  <div class="bg-item">🥘</div>
+  <div class="bg-item">🎉</div>
+  <!-- Sparkle dots -->
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+</div>
+
+<!-- BOOKING CARD -->
 <form action="#">
 <div class="card">
-  <div class="icon"><img src="Screenshot 2025-12-28 085733.jpg" alt="#"></div>
+  <div class="icon"><img src="Screenshot 2025-12-28 085733.jpg" alt="Tifun-tedo logo"></div>
 
   <h1>Tifun-tedo</h1>
   <p class="subtitle">Reserve your perfect slot</p>
@@ -133,7 +283,7 @@ input:focus { border: #d46a3a; background: #fff4ee; }
     <div class="slot" onclick="selectSlot('quarter')">Quarter</div>
     <div class="slot" onclick="selectSlot('half')">Half</div>
     <div class="slot" onclick="selectSlot('full')">Full</div>
-    <div class="slot"><input type="number" max="800" class="input" placeholder="Other quantity"></div>
+    <div class="slot"><input type="number" max="800" class="input" placeholder="Other qty"></div>
   </div>
 
   <label class="section-title">Number of Slots</label>
@@ -156,13 +306,13 @@ input:focus { border: #d46a3a; background: #fff4ee; }
 </form>
 
 <script>
-const full = document.getElementById("summaryText-full");
-const half = document.getElementById("summaryText-half");
+const full    = document.getElementById("summaryText-full");
+const half    = document.getElementById("summaryText-half");
 const quarter = document.getElementById("summaryText-quarter");
-const count = document.getElementById("count");
-const minus = document.getElementById("minus");
-const plus = document.getElementById("plus");
-const reset = document.querySelector('.reset');
+const count   = document.getElementById("count");
+const minus   = document.getElementById("minus");
+const plus    = document.getElementById("plus");
+const reset   = document.querySelector('.reset');
 
 let currentSlot = null;
 let bookingNumber = 1;
@@ -170,8 +320,8 @@ let bookingNumber = 1;
 function updateCountDisplay() {
   count.innerHTML = bookingNumber;
   if (currentSlot === 'quarter') quarter.innerHTML = `${bookingNumber} × Quarter Slot`;
-  if (currentSlot === 'half') half.innerHTML = `${bookingNumber} × Half Slot`;
-  if (currentSlot === 'full') full.innerHTML = `${bookingNumber} × Full Slot`;
+  if (currentSlot === 'half')    half.innerHTML    = `${bookingNumber} × Half Slot`;
+  if (currentSlot === 'full')    full.innerHTML    = `${bookingNumber} × Full Slot`;
 }
 
 function selectSlot(slot) {
@@ -180,15 +330,15 @@ function selectSlot(slot) {
   updateCountDisplay();
 }
 
-plus.onclick = () => { bookingNumber++; updateCountDisplay(); }
+plus.onclick  = () => { bookingNumber++; updateCountDisplay(); }
 minus.onclick = () => { if (bookingNumber > 1) { bookingNumber--; updateCountDisplay(); } }
 
 reset.onclick = () => {
   bookingNumber = 1;
   currentSlot = null;
   count.innerHTML = 1;
-  full.innerHTML = '0 × Full Slot';
-  half.innerHTML = '0 × Half Slot';
+  full.innerHTML    = '0 × Full Slot';
+  half.innerHTML    = '0 × Half Slot';
   quarter.innerHTML = '0 × Quarter Slot';
 }
 
@@ -196,12 +346,12 @@ document.querySelector('.confirm-btn').onclick = async function(e) {
   e.preventDefault();
 
   const bookingConfermation = document.querySelector('#booking-confermation');
-  const nameInput = document.querySelector('input[type="text"]').value.trim();
+  const nameInput  = document.querySelector('input[type="text"]').value.trim();
   const otherInput = Number(document.querySelector('.input').value) || 0;
 
   const quarterCount = Number(quarter.innerHTML.charAt(0));
-  const halfCount = Number(half.innerHTML.charAt(0));
-  const fullCount = Number(full.innerHTML.charAt(0));
+  const halfCount    = Number(half.innerHTML.charAt(0));
+  const fullCount    = Number(full.innerHTML.charAt(0));
   const total = quarterCount * 3000 + halfCount * 6000 + fullCount * 12000 + otherInput;
 
   if (!nameInput || total <= 0) {
@@ -213,21 +363,14 @@ document.querySelector('.confirm-btn').onclick = async function(e) {
     const response = await fetch("/api/book", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: nameInput,
-        quarter: quarterCount,
-        half: halfCount,
-        full: fullCount,
-        total
-      })
+      body: JSON.stringify({ name: nameInput, quarter: quarterCount, half: halfCount, full: fullCount, total })
     });
 
     const data = await response.json();
-    bookingConfermation.innerHTML = `${data.message} — Total: ₦${total}`;
+    bookingConfermation.innerHTML = `${data.message} — Total: ₦${total.toLocaleString()}`;
 
-    // Reset display
-    full.innerHTML = '0 × Full Slot';
-    half.innerHTML = '0 × Half Slot';
+    full.innerHTML    = '0 × Full Slot';
+    half.innerHTML    = '0 × Half Slot';
     quarter.innerHTML = '0 × Quarter Slot';
     count.innerHTML = 1;
     bookingNumber = 1;
@@ -242,4 +385,3 @@ document.querySelector('.confirm-btn').onclick = async function(e) {
 </script>
 </body>
 </html>
-

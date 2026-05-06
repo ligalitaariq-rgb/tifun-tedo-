@@ -1,35 +1,60 @@
-
 // server.js
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const mongoose = require("mongoose");
+const axios = require("axios");
+const { createClient } = require("@supabase/supabase-js");
 
 // =====================
-// DATABASE CONNECTION
+// DATABASE CONNECTION - SUPABASE
 // =====================
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error("❌ MongoDB error:", err));
-
-// =====================
-// SCHEMA & MODEL
-// =====================
-const bookingSchema = new mongoose.Schema(
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY,
   {
-    name: { type: String, required: true, trim: true },
-    quarter: { type: Number, default: 0 },
-    half: { type: Number, default: 0 },
-    full: { type: Number, default: 0 },
-    total: { type: Number, required: true }
-  },
-  { timestamps: true }
+    global: {
+      fetch: async (url, options) => {
+        try {
+          const response = await axios({
+            url,
+            method: options.method,
+            data: options.body ? JSON.parse(options.body) : undefined,
+            headers: options.headers,
+            timeout: 30000 // 30 seconds
+          });
+          return {
+            ok: true,
+            status: response.status,
+            statusText: response.statusText,
+            headers: {
+              get: (name) => response.headers[name.toLowerCase()]
+            },
+            json: async () => response.data,
+            text: async () => JSON.stringify(response.data)
+          };
+        } catch (err) {
+          return {
+            ok: false,
+            status: err.response?.status || 500,
+            statusText: err.message,
+            headers: {
+              get: (name) => err.response?.headers?.[name.toLowerCase()]
+            },
+            json: async () => err.response?.data || { message: err.message },
+            text: async () => JSON.stringify(err.response?.data || { message: err.message })
+          };
+        }
+      }
+    }
+  }
 );
 
-const Booking = mongoose.model("Booking", bookingSchema);
+// Test connection
+supabase.auth.getSession()
+  .then(() => console.log("✅ Supabase connected"))
+  .catch(err => console.error("❌ Supabase error:", err));
 
 // =====================
 // APP SETUP
@@ -51,17 +76,32 @@ app.post("/api/book", async (req, res) => {
       return res.status(400).json({ message: "Invalid booking data" });
     }
 
-    const booking = await Booking.create({
-      name,
-      quarter,
-      half,
-      full,
-      total
-    });
+    const { data, error } = await supabase
+      .from("bookings")
+      .insert([
+        {
+          name,
+          quarter_qty: quarter,
+          half_qty: half,
+          full_qty: full,
+          total,
+          created_at: new Date().toISOString()
+        }
+      ])
+      .select();
+
+    if (error) {
+      console.error("Booking Error Details:", error);
+      return res.status(500).json({
+        message: "Failed to save booking",
+        error: error.message,
+        details: error.details || "Check if the 'bookings' table exists in Supabase."
+      });
+    }
 
     res.status(201).json({
       message: "Booking saved successfully",
-      booking
+      booking: data[0]
     });
   } catch (error) {
     console.error(error);
@@ -71,8 +111,16 @@ app.post("/api/book", async (req, res) => {
 
 app.get("/api/bookings", async (req, res) => {
   try {
-    const bookings = await Booking.find().sort({ createdAt: -1 });
-    res.json(bookings);
+    const { data, error } = await supabase
+      .from("bookings")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      return res.status(500).json({ message: "Failed to fetch bookings", error: error.message });
+    }
+
+    res.json(data);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch bookings" });
   }
