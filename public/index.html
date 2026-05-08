@@ -1,512 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
-<title>Tifun-tedo</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
+  <title>Tifun-tedo - Login / Signup</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
-  display: block;
-  width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-  padding: 20px 0;
-}
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: white;
+    }
 
-/* ===================== ANIMATED BACKGROUND ===================== */
-.bg-animation {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
+    /* ===================== ANIMATED BACKGROUND ===================== */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.bg-item {
-  position: absolute;
-  bottom: -120px;
-  font-size: 48px;
-  opacity: 0;
-  animation: floatUp linear infinite;
-  filter: drop-shadow(0 0 8px rgba(212, 106, 58, 0.4));
-}
+    .bg-item {
+      position: absolute;
+      bottom: -100px;
+      font-size: 50px;
+      opacity: 0;
+      animation: floatUp 15s linear infinite;
+    }
 
-@keyframes floatUp {
-  0%   { transform: translateY(0) rotate(0deg) scale(0.8);   opacity: 0; }
-  10%  { opacity: 0.35; }
-  80%  { opacity: 0.25; }
-  100% { transform: translateY(-110vh) rotate(360deg) scale(1.1); opacity: 0; }
-}
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
 
-.bg-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s;   font-size: 40px; }
-.bg-item:nth-child(2)  { left: 12%; animation-duration: 12s; animation-delay: 1.5s; font-size: 55px; }
-.bg-item:nth-child(3)  { left: 22%; animation-duration: 10s; animation-delay: 0.8s; font-size: 38px; }
-.bg-item:nth-child(4)  { left: 30%; animation-duration: 14s; animation-delay: 3s;   font-size: 50px; }
-.bg-item:nth-child(5)  { left: 42%; animation-duration: 8s;  animation-delay: 2s;   font-size: 44px; }
-.bg-item:nth-child(6)  { left: 53%; animation-duration: 11s; animation-delay: 0.4s; font-size: 36px; }
-.bg-item:nth-child(7)  { left: 63%; animation-duration: 13s; animation-delay: 4s;   font-size: 52px; }
-.bg-item:nth-child(8)  { left: 72%; animation-duration: 9.5s;animation-delay: 1s;   font-size: 42px; }
-.bg-item:nth-child(9)  { left: 82%; animation-duration: 12s; animation-delay: 2.5s; font-size: 46px; }
-.bg-item:nth-child(10) { left: 91%; animation-duration: 10s; animation-delay: 3.5s; font-size: 40px; }
-.bg-item:nth-child(11) { left: 18%; animation-duration: 15s; animation-delay: 5s;   font-size: 34px; }
-.bg-item:nth-child(12) { left: 47%; animation-duration: 11s; animation-delay: 6s;   font-size: 58px; }
-.bg-item:nth-child(13) { left: 68%; animation-duration: 8.5s;animation-delay: 0.2s; font-size: 32px; }
-.bg-item:nth-child(14) { left: 36%; animation-duration: 13s; animation-delay: 7s;   font-size: 48px; }
-.bg-item:nth-child(15) { left: 78%; animation-duration: 9s;  animation-delay: 4.5s; font-size: 44px; }
+      10% {
+        opacity: 0.2;
+      }
 
-/* Sparkle/star particles */
-.sparkle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #e37a3f;
-  border-radius: 50%;
-  animation: sparkleFloat linear infinite;
-  opacity: 0;
-}
-@keyframes sparkleFloat {
-  0%   { transform: translateY(0) scale(0); opacity: 0; }
-  20%  { opacity: 0.7; transform: scale(1); }
-  80%  { opacity: 0.3; }
-  100% { transform: translateY(-90vh) scale(0.2); opacity: 0; }
-}
-.sparkle:nth-child(1)  { left: 8%;  bottom: -10px; animation-duration: 7s;  animation-delay: 0.5s;  background: #f0a060; width: 5px; height: 5px; }
-.sparkle:nth-child(2)  { left: 25%; bottom: -10px; animation-duration: 9s;  animation-delay: 2s;    background: #d46a3a; width: 7px; height: 7px; }
-.sparkle:nth-child(3)  { left: 50%; bottom: -10px; animation-duration: 6s;  animation-delay: 1s;    background: #ffcc88; width: 4px; height: 4px; }
-.sparkle:nth-child(4)  { left: 70%; bottom: -10px; animation-duration: 10s; animation-delay: 3.5s;  background: #e37a3f; width: 6px; height: 6px; }
-.sparkle:nth-child(5)  { left: 88%; bottom: -10px; animation-duration: 8s;  animation-delay: 0.8s;  background: #f0a060; width: 5px; height: 5px; }
-.sparkle:nth-child(6)  { left: 38%; bottom: -10px; animation-duration: 11s; animation-delay: 4.2s;  background: #c24d2c; width: 8px; height: 8px; }
+      90% {
+        opacity: 0.1;
+      }
 
-/* ===================== CARD ===================== */
-.card {
-  position: relative;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.97);
-  width: 360px;
-  max-width: 90%;
-  padding: 28px 25px;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,150,80,0.15);
-  backdrop-filter: blur(4px);
-  margin: 30px auto;
-}
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
 
-img {
-  border-radius: 50px;
-  width: 100px;
-  height: 100px;
-}
-.icon {
-  background: #d46a3a;
-  color: white;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  box-shadow: 0 4px 16px rgba(212,106,58,0.4);
-}
-h1 { text-align: center; color: #2d0d00; margin-top: 10px; }
-.subtitle { text-align: center; color: #888; margin-bottom: 12px; }
+    .bg-item:nth-child(1) {
+      left: 10%;
+      animation-delay: 0s;
+    }
 
-label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-top: 14px; margin-bottom: 4px; }
+    .bg-item:nth-child(2) {
+      left: 30%;
+      animation-delay: 4s;
+    }
 
-input[type="text"], input[type="number"] {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1.5px solid #ddd;
-  font-size: 14px;
-  transition: border-color 0.2s, background 0.2s;
-  outline: none;
-}
-input[type="text"]:focus, input[type="number"]:focus {
-  border-color: #d46a3a;
-  background: #fff4ee;
-}
+    .bg-item:nth-child(3) {
+      left: 50%;
+      animation-delay: 8s;
+    }
 
-.slots {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 6px;
-}
-.slot {
-  border: 2px solid #ddd;
-  padding: 14px;
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  color: #555;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
-}
-.slot:hover  { border-color: #d46a3a; background: #fff4ee; color: #c24d2c; }
-.slot:active { border-color: #c24d2c; background: #ffe8d8; }
-.slot .input {
-  border: none;
-  background: transparent;
-  width: 100%;
-  text-align: center;
-  font-size: 14px;
-  outline: none;
-  color: #555;
-}
+    .bg-item:nth-child(4) {
+      left: 70%;
+      animation-delay: 2s;
+    }
 
-.section-title { margin-top: 20px; font-weight: bold; font-size: 13px; color: #555; }
+    .bg-item:nth-child(5) {
+      left: 90%;
+      animation-delay: 6s;
+    }
 
-.counter {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin: 10px 0;
-}
-.counter button {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  border: 1.5px solid #ddd;
-  font-size: 20px;
-  cursor: pointer;
-  background: #f5f5f5;
-  transition: background 0.2s;
-}
-.counter button:hover { background: #ffe0cc; border-color: #d46a3a; }
-.counter span { font-size: 20px; font-weight: 700; width: 30px; text-align: center; color: #c24d2c; }
+    /* ===================== LOGIN CARD ===================== */
+    .container {
+      position: relative;
+      width: 400px;
+      perspective: 1000px;
+      z-index: 10;
+    }
 
-.summary {
-  background: linear-gradient(135deg, #fff4ee, #ffeedd);
-  padding: 15px;
-  border-radius: 12px;
-  margin: 15px 0;
-  border: 1px solid #f5c9a8;
-}
-.summary strong { color: #7a2e10; font-size: 13px; }
-.summary p { font-size: 13px; color: #666; margin-top: 4px; }
+    .card {
+      width: 100%;
+      position: relative;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
 
-.confirm-btn {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(to right, #c24d2c, #e37a3f);
-  color: white;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  letter-spacing: 0.3px;
-  transition: opacity 0.2s, transform 0.1s;
-}
-.confirm-btn:hover  { opacity: 0.92; }
-.confirm-btn:active { transform: scale(0.98); }
+    .card.flip {
+      transform: rotateY(180deg);
+    }
 
-#booking-confermation {
-  width: 100%;
-  padding: 14px 16px;
-  background: linear-gradient(to left, #d2502b, #e07b40);
-  margin: 12px 0 0;
-  border-radius: 14px;
-  text-align: center;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-}
+    .card-front,
+    .card-back {
+      width: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
 
-.reset {
-  background-color: #f44336;
-  border: none;
-  color: white;
-  padding: 8px 18px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 10px;
-  margin-top: 6px;
-  transition: background 0.2s;
-}
-.reset:hover { background-color: #d32f2f; }
-/* ===================== MENU ===================== */
-.menu-container {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-}
+    .card-front {
+      position: relative;
+      transition: opacity 0s 0.3s;
+      opacity: 1;
+    }
 
-.menu-btn {
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  width: 50px;
-  height: 50px;
-  border-radius: 15px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
-}
+    .card.flip .card-front {
+      opacity: 0;
+    }
 
-.menu-btn:hover {
-  transform: translateY(-2px);
-  background: #fff;
-}
+    .card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+      transition: opacity 0s 0.3s;
+      opacity: 0;
+    }
 
-.menu-btn span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background: #d46a3a;
-  border-radius: 2px;
-  transition: 0.3s;
-}
+    .card.flip .card-back {
+      opacity: 1;
+    }
 
-.menu-dropdown {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 8px;
-  min-width: 200px;
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      text-align: center;
+      background: linear-gradient(to right, #f0a060, #d46a3a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-.menu-dropdown.show {
-  display: flex;
-  animation: slideDown 0.3s ease forwards;
-}
+    .input-group {
+      margin-bottom: 20px;
+    }
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
 
-.menu-item {
-  padding: 12px 16px;
-  border: none;
-  background: transparent;
-  text-align: left;
-  color: #2d0d00;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
 
-.menu-item:hover {
-  background: rgba(212, 106, 58, 0.1);
-  color: #c24d2c;
-  padding-left: 20px;
-}
+    .input-group input:focus {
+      border-color: #d46a3a;
+    }
 
-.menu-item i {
-  font-size: 16px;
-}
-</style>
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #c24d2c, #e37a3f);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
 
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(194, 77, 44, 0.4);
+    }
+
+    .toggle-text {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .toggle-text span {
+      color: #f0a060;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .error-msg {
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- MENU BUTTON -->
-<div class="menu-container">
-  <button class="menu-btn" id="menuToggle" aria-label="Open Menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-  <div class="menu-dropdown" id="menuDropdown">
-    <button class="menu-item" onclick="alert('Tifun-tedo: Your ultimate slot reservation platform.')">
-      <span>📄</span> About Page
-    </button>
-    <button class="menu-item" onclick="window.location.href='about developer .html'">
-      <span>👨‍💻</span> About Developer
-    </button>
-  </div>
-</div>
-
-
-<!-- ANIMATED BACKGROUND -->
-<div class="bg-animation">
-  <!-- Food & celebration emojis floating up -->
-  <div class="bg-item">🍖</div>
-  <div class="bg-item">🍗</div>
-  <div class="bg-item">🥘</div>
-  <div class="bg-item">🎉</div>
-  <div class="bg-item">🍽️</div>
-  <div class="bg-item">🥩</div>
-  <div class="bg-item">🎊</div>
-  <div class="bg-item">🍛</div>
-  <div class="bg-item">🥗</div>
-  <div class="bg-item">🍖</div>
-  <div class="bg-item">✨</div>
-  <div class="bg-item">🎈</div>
-  <div class="bg-item">🍗</div>
-  <div class="bg-item">🥘</div>
-  <div class="bg-item">🎉</div>
-  <!-- Sparkle dots -->
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-</div>
-
-<!-- BOOKING CARD -->
-<form action="#">
-<div class="card">
-  <div class="icon"><img src="Screenshot 2025-12-28 085733.jpg" alt="Tifun-tedo logo"></div>
-
-  <h1>Tifun-tedo</h1>
-  <p class="subtitle">Reserve your perfect slot</p>
-
-  <label>Your Name</label>
-  <input type="text" placeholder="Enter your name" minlength="3" required pattern="[a-zA-Z\s]+" />
-  <input type="reset" class="reset" />
-
-  <label>Select Slot Type</label>
-  <div class="slots">
-    <div class="slot" onclick="selectSlot('quarter')">Quarter</div>
-    <div class="slot" onclick="selectSlot('half')">Half</div>
-    <div class="slot" onclick="selectSlot('full')">Full</div>
-    <div class="slot"><input type="number" max="800" class="input" placeholder="Other qty"></div>
+  <div class="bg-animation">
+    <div class="bg-item">🥩</div>
+    <div class="bg-item">🍖</div>
+    <div class="bg-item">🥘</div>
+    <div class="bg-item">🍛</div>
+    <div class="bg-item">🎊</div>
   </div>
 
-  <label class="section-title">Number of Slots</label>
-  <div class="counter">
-    <button id="minus" type="button">−</button>
-    <span id="count">1</span>
-    <button id="plus" type="button">+</button>
+  <div class="container">
+    <div class="card" id="card">
+      <!-- LOGIN FORM -->
+      <div class="card-front">
+        <h2>Welcome Back</h2>
+        <form id="loginForm">
+          <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="loginUser" required placeholder="Enter username">
+          </div>
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="loginPass" required placeholder="Enter password">
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <div id="loginError" class="error-msg"></div>
+          <div class="toggle-text">
+            Don't have an account? <span onclick="toggleCard()">Sign up</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div class="card-back">
+        <h2>Create Account</h2>
+        <form id="signupForm">
+          <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="signupUser" required placeholder="Choose a username">
+          </div>
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="signupPass" required placeholder="Create a password">
+          </div>
+          <button type="submit" class="btn">Sign Up</button>
+          <div id="signupError" class="error-msg"></div>
+          <div class="toggle-text">
+            Already have an account? <span onclick="toggleCard()">Login</span>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <div class="summary">
-    <strong>Booking Summary</strong>
-    <p id="summaryText-quarter">0 × Quarter Slot</p>
-    <p id="summaryText-half">0 × Half Slot</p>
-    <p id="summaryText-full">0 × Full Slot</p>
-  </div>
+  <script>
+    function toggleCard() {
+      document.getElementById('card').classList.toggle('flip');
+    }
 
-  <button class="confirm-btn">Confirm Booking</button>
-  <p id="booking-confermation">Select your desired slot</p>
-</div>
-</form>
+    // Signup Logic
+    document.getElementById('signupForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('signupUser').value.trim();
+      const password = document.getElementById('signupPass').value;
+      const errorDiv = document.getElementById('signupError');
 
-<script>
-const full    = document.getElementById("summaryText-full");
-const half    = document.getElementById("summaryText-half");
-const quarter = document.getElementById("summaryText-quarter");
-const count   = document.getElementById("count");
-const minus   = document.getElementById("minus");
-const plus    = document.getElementById("plus");
-const reset   = document.querySelector('.reset');
+      errorDiv.innerText = '';
+      errorDiv.style.display = 'none';
 
-let currentSlot = null;
-let bookingNumber = 1;
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
 
-// Menu Logic
-const menuToggle = document.getElementById('menuToggle');
-const menuDropdown = document.getElementById('menuDropdown');
+        if (res.ok) {
+          alert('Signup successful! Please login.');
+          document.getElementById('signupForm').reset();
+          toggleCard();
+        } else {
+          errorDiv.innerText = data.message || 'Signup failed';
+          if (data.error) errorDiv.innerText += `: ${data.error}`;
+          errorDiv.style.display = 'block';
+        }
+      } catch (err) {
+        errorDiv.innerText = 'Server connection error';
+        errorDiv.style.display = 'block';
+      }
+    };
 
-menuToggle.onclick = (e) => {
-  e.stopPropagation();
-  menuDropdown.classList.toggle('show');
-};
+    // Login Logic
+    document.getElementById('loginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('loginUser').value.trim();
+      const password = document.getElementById('loginPass').value;
+      const errorDiv = document.getElementById('loginError');
 
-document.onclick = (e) => {
-  if (!menuToggle.contains(e.target) && !menuDropdown.contains(e.target)) {
-    menuDropdown.classList.remove('show');
-  }
-};
+      errorDiv.innerText = '';
+      errorDiv.style.display = 'none';
 
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
 
-function updateCountDisplay() {
-  count.innerHTML = bookingNumber;
-  if (currentSlot === 'quarter') quarter.innerHTML = `${bookingNumber} × Quarter Slot`;
-  if (currentSlot === 'half')    half.innerHTML    = `${bookingNumber} × Half Slot`;
-  if (currentSlot === 'full')    full.innerHTML    = `${bookingNumber} × Full Slot`;
-}
-
-function selectSlot(slot) {
-  currentSlot = slot;
-  bookingNumber = 1;
-  updateCountDisplay();
-}
-
-plus.onclick  = () => { bookingNumber++; updateCountDisplay(); }
-minus.onclick = () => { if (bookingNumber > 1) { bookingNumber--; updateCountDisplay(); } }
-
-reset.onclick = () => {
-  bookingNumber = 1;
-  currentSlot = null;
-  count.innerHTML = 1;
-  full.innerHTML    = '0 × Full Slot';
-  half.innerHTML    = '0 × Half Slot';
-  quarter.innerHTML = '0 × Quarter Slot';
-}
-
-document.querySelector('.confirm-btn').onclick = async function(e) {
-  e.preventDefault();
-
-  const bookingConfermation = document.querySelector('#booking-confermation');
-  const nameInput  = document.querySelector('input[type="text"]').value.trim();
-  const otherInput = Number(document.querySelector('.input').value) || 0;
-
-  const quarterCount = Number(quarter.innerHTML.charAt(0));
-  const halfCount    = Number(half.innerHTML.charAt(0));
-  const fullCount    = Number(full.innerHTML.charAt(0));
-  const total = quarterCount * 3250 + halfCount * 6500 + fullCount * 13000 + otherInput;
-
-  if (!nameInput || total <= 0) {
-    bookingConfermation.innerHTML = "Please enter your name and select a slot";
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/book", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: nameInput, quarter: quarterCount, half: halfCount, full: fullCount, total })
-    });
-
-    const data = await response.json();
-    bookingConfermation.innerHTML = `${data.message} — Total: ₦${total.toLocaleString()}`;
-
-    full.innerHTML    = '0 × Full Slot';
-    half.innerHTML    = '0 × Half Slot';
-    quarter.innerHTML = '0 × Quarter Slot';
-    count.innerHTML = 1;
-    bookingNumber = 1;
-    currentSlot = null;
-    document.querySelector('.input').value = '';
-    document.querySelector('input[type="text"]').value = '';
-  } catch (err) {
-    bookingConfermation.innerHTML = "Error connecting to server";
-    console.error(err);
-  }
-};
-</script>
+        if (res.ok) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+          if (data.user.isAdmin) {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'selection.html';
+          }
+        } else {
+          errorDiv.innerText = data.message || 'Login failed';
+          if (data.error) errorDiv.innerText += `: ${data.error}`;
+          errorDiv.style.display = 'block';
+        }
+      } catch (err) {
+        errorDiv.innerText = 'Server connection error';
+        errorDiv.style.display = 'block';
+      }
+    };
+  </script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,8 +40,13 @@
         }
 
         @keyframes moveGlow {
-            0% { transform: translate(-50%, -50%); }
-            100% { transform: translate(50%, 50%); }
+            0% {
+                transform: translate(-50%, -50%);
+            }
+
+            100% {
+                transform: translate(50%, 50%);
+            }
         }
 
         .container {
@@ -52,8 +58,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .profile-card {
@@ -86,15 +99,23 @@
         .profile-img-container::after {
             content: '';
             position: absolute;
-            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
             border: 2px dashed rgba(212, 106, 58, 0.3);
             border-radius: 50%;
             animation: rotate 20s linear infinite;
         }
 
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         h1 {
@@ -155,6 +176,7 @@
             color: #f0a060;
         }
 
+
         .skill-item p {
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.6);
@@ -179,30 +201,39 @@
         }
 
         @media (max-width: 600px) {
-            .profile-card { padding: 30px 20px; }
-            h1 { font-size: 1.8rem; }
-            .skills-grid { grid-template-columns: 1fr; }
+            .profile-card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="bg-glow"></div>
-    
+
     <div class="container">
         <div class="profile-card">
             <div class="profile-img-container">
                 <img src="T-square.jpg" alt="Ligali Taariq" class="profile-img">
             </div>
-            
+
             <h1>LIGALI TAARIQ</h1>
             <div class="nickname">(T-square)</div>
-            
+
             <p class="bio">
-                A Mechanical Engineering student & practitioner, Web Developer, and Graphic Designer. 
-                I am passionate about building seamless solutions that bridge the gap between 
+                A Mechanical Engineering student & practitioner, Web Developer, and Graphic Designer.
+                I am passionate about building seamless solutions that bridge the gap between
                 digital interfaces and physical systems.
             </p>
-            
+
             <div class="skills-grid">
                 <div class="skill-item">
                     <span class="skill-icon">💻</span>
@@ -220,9 +251,10 @@
                     <p>Creating visually compelling designs that tell a story and engage users.</p>
                 </div>
             </div>
-            
+
             <a href="index.html" class="back-btn">← Back to Home</a>
         </div>
     </div>
 </body>
+
 </html>

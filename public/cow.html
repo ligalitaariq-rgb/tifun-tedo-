@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
+<title>Tifun-tedo - Cow Booking</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+  display: block;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  padding: 20px 0;
+  color: white;
+}
+
+/* ===================== ANIMATED BACKGROUND ===================== */
+.bg-animation {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-item {
+  position: absolute;
+  bottom: -120px;
+  font-size: 48px;
+  opacity: 0;
+  animation: floatUp linear infinite;
+  filter: drop-shadow(0 0 8px rgba(212, 106, 58, 0.4));
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg) scale(0.8);   opacity: 0; }
+  10%  { opacity: 0.35; }
+  80%  { opacity: 0.25; }
+  100% { transform: translateY(-110vh) rotate(360deg) scale(1.1); opacity: 0; }
+}
+
+.bg-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s;   font-size: 40px; }
+.bg-item:nth-child(2)  { left: 12%; animation-duration: 12s; animation-delay: 1.5s; font-size: 55px; }
+.bg-item:nth-child(3)  { left: 22%; animation-duration: 10s; animation-delay: 0.8s; font-size: 38px; }
+.bg-item:nth-child(4)  { left: 30%; animation-duration: 14s; animation-delay: 3s;   font-size: 50px; }
+.bg-item:nth-child(5)  { left: 42%; animation-duration: 8s;  animation-delay: 2s;   font-size: 44px; }
+.bg-item:nth-child(6)  { left: 53%; animation-duration: 11s; animation-delay: 0.4s; font-size: 36px; }
+.bg-item:nth-child(7)  { left: 63%; animation-duration: 13s; animation-delay: 4s;   font-size: 52px; }
+.bg-item:nth-child(8)  { left: 72%; animation-duration: 9.5s;animation-delay: 1s;   font-size: 42px; }
+.bg-item:nth-child(9)  { left: 82%; animation-duration: 12s; animation-delay: 2.5s; font-size: 46px; }
+.bg-item:nth-child(10) { left: 91%; animation-duration: 10s; animation-delay: 3.5s; font-size: 40px; }
+
+/* Sparkle/star particles */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #e37a3f;
+  border-radius: 50%;
+  animation: sparkleFloat linear infinite;
+  opacity: 0;
+}
+@keyframes sparkleFloat {
+  0%   { transform: translateY(0) scale(0); opacity: 0; }
+  20%  { opacity: 0.7; transform: scale(1); }
+  80%  { opacity: 0.3; }
+  100% { transform: translateY(-90vh) scale(0.2); opacity: 0; }
+}
+.sparkle:nth-child(1)  { left: 8%;  bottom: -10px; animation-duration: 7s;  animation-delay: 0.5s;  background: #f0a060; }
+.sparkle:nth-child(2)  { left: 25%; bottom: -10px; animation-duration: 9s;  animation-delay: 2s;    background: #d46a3a; }
+.sparkle:nth-child(3)  { left: 50%; bottom: -10px; animation-duration: 6s;  animation-delay: 1s;    background: #ffcc88; }
+
+/* ===================== CARD ===================== */
+.card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.97);
+  width: 360px;
+  max-width: 90%;
+  padding: 28px 25px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,150,80,0.15);
+  backdrop-filter: blur(4px);
+  margin: 30px auto;
+  color: #333;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+img.logo {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+h1 { text-align: center; color: #2d0d00; margin-top: 5px; font-size: 1.8rem; }
+.subtitle { text-align: center; color: #666; margin-bottom: 20px; font-weight: 500; }
+
+label { font-size: 0.85rem; font-weight: 600; color: #555; display: block; margin-top: 15px; margin-bottom: 5px; }
+
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid #ddd;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+input[type="text"]:focus, input[type="number"]:focus {
+  border-color: #d46a3a;
+  background: #fffafa;
+  box-shadow: 0 0 0 3px rgba(212, 106, 58, 0.1);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 8px;
+}
+.slot-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.slot {
+  border: 2px solid #eee;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  background: white;
+}
+.slot:hover  { border-color: #d46a3a; background: #fff4ee; transform: translateY(-2px); }
+.slot.active { border-color: #d46a3a; background: #ffe8d8; color: #c24d2c; }
+
+.slot-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+.slot-counter button {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  background: #f0f0f0;
+  color: #333;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.slot-counter button:hover { background: #d46a3a; color: white; }
+.slot-counter span { font-size: 1.2rem; font-weight: 800; color: #c24d2c; min-width: 30px; text-align: center; }
+
+.summary {
+  background: #fdf5f0;
+  padding: 18px;
+  border-radius: 15px;
+  margin: 20px 0;
+  border: 1px solid #f9e1d0;
+}
+.summary strong { color: #7a2e10; display: block; margin-bottom: 8px; font-size: 0.9rem; }
+.summary p { font-size: 0.85rem; color: #555; margin-bottom: 4px; display: flex; justify-content: space-between; }
+
+.confirm-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #c24d2c, #e37a3f);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(194, 77, 44, 0.3);
+}
+.confirm-btn:hover  { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(194, 77, 44, 0.4); opacity: 0.95; }
+.confirm-btn:active { transform: scale(0.98); }
+
+#booking-confermation {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 12px;
+  border-radius: 10px;
+  display: none;
+}
+#booking-confermation.success { background: #e8f5e9; color: #2e7d32; display: block; }
+#booking-confermation.error { background: #ffebee; color: #c62828; display: block; }
+
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.3);
+  transition: all 0.3s ease;
+}
+.back-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-5px); }
+</style>
+</head>
+<body>
+
+<a href="selection.html" class="back-btn">← Back to Selection</a>
+
+<div class="bg-animation">
+  <div class="bg-item">🐄</div>
+  <div class="bg-item">🥩</div>
+  <div class="bg-item">🍖</div>
+  <div class="bg-item">🐄</div>
+  <div class="bg-item">🥩</div>
+  <div class="bg-item">🍖</div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+</div>
+
+<div class="card">
+  <div class="logo-container">
+    <img src="Screenshot 2025-12-28 085733.jpg" alt="Logo" class="logo">
+  </div>
+
+  <h1>Cow Booking</h1>
+  <p class="subtitle">Premium Beef Reservation</p>
+
+  <label>Reservation Name</label>
+  <input type="text" id="bookingName" placeholder="Enter name for reservation" required />
+
+  <label>Select Slot Types & Quantities</label>
+  <div class="slots">
+    <div class="slot-group">
+      <div class="slot" data-type="quarter" onclick="toggleSlot('quarter')">Quarter<br><small>₦3,250</small></div>
+      <div class="slot-counter" id="quarterCounter" style="display:none;">
+        <button type="button" onclick="changeQty('quarter', -1)">−</button>
+        <span id="quarterQty">1</span>
+        <button type="button" onclick="changeQty('quarter', 1)">+</button>
+      </div>
+    </div>
+    <div class="slot-group">
+      <div class="slot" data-type="half" onclick="toggleSlot('half')">Half<br><small>₦6,500</small></div>
+      <div class="slot-counter" id="halfCounter" style="display:none;">
+        <button type="button" onclick="changeQty('half', -1)">−</button>
+        <span id="halfQty">1</span>
+        <button type="button" onclick="changeQty('half', 1)">+</button>
+      </div>
+    </div>
+    <div class="slot-group">
+      <div class="slot" data-type="full" onclick="toggleSlot('full')">Full<br><small>₦13,000</small></div>
+      <div class="slot-counter" id="fullCounter" style="display:none;">
+        <button type="button" onclick="changeQty('full', -1)">−</button>
+        <span id="fullQty">1</span>
+        <button type="button" onclick="changeQty('full', 1)">+</button>
+      </div>
+    </div>
+    <div class="slot-group">
+      <div class="slot" style="padding: 10px;"><input type="number" id="otherQty" class="input" placeholder="Other ₦" style="border:none; text-align:center; padding:5px;"></div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <strong>Booking Summary</strong>
+    <div id="summaryBreakdown">
+      <p id="summaryQuarter" style="display:none;"><span>Quarter:</span> <span id="quarterSummary">0</span></p>
+      <p id="summaryHalf" style="display:none;"><span>Half:</span> <span id="halfSummary">0</span></p>
+      <p id="summaryFull" style="display:none;"><span>Full:</span> <span id="fullSummary">0</span></p>
+      <p id="summaryOther" style="display:none;"><span>Other:</span> <span id="otherSummary">₦0</span></p>
+    </div>
+    <p style="border-top: 1px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: bold; color: #2d0d00;">
+      <span>Total:</span> <span id="summaryTotal">₦0</span>
+    </p>
+  </div>
+
+  <button class="confirm-btn" onclick="confirmBooking()">Confirm Reservation</button>
+  <div id="booking-confermation"></div>
+</div>
+
+<script>
+let quantities = { quarter: 0, half: 0, full: 0 };
+const prices = { quarter: 3250, half: 6500, full: 13000 };
+
+const user = JSON.parse(localStorage.getItem('user'));
+if (!user) window.location.href = 'index.html';
+
+function toggleSlot(type) {
+  const slot = document.querySelector(`[data-type="${type}"]`);
+  const counter = document.getElementById(`${type}Counter`);
+  
+  if (quantities[type] > 0) {
+    // Deselect
+    quantities[type] = 0;
+    slot.classList.remove('active');
+    counter.style.display = 'none';
+  } else {
+    // Select with quantity 1
+    quantities[type] = 1;
+    slot.classList.add('active');
+    counter.style.display = 'flex';
+    document.getElementById(`${type}Qty`).innerText = 1;
+  }
+  updateSummary();
+}
+
+function changeQty(type, delta) {
+  quantities[type] = Math.max(0, quantities[type] + delta);
+  if (quantities[type] === 0) {
+    // If quantity becomes 0, deselect the slot
+    toggleSlot(type);
+    return;
+  }
+  document.getElementById(`${type}Qty`).innerText = quantities[type];
+  updateSummary();
+}
+
+function updateSummary() {
+  let total = 0;
+  
+  // Update quarter summary
+  if (quantities.quarter > 0) {
+    const quarterTotal = quantities.quarter * prices.quarter;
+    document.getElementById('quarterSummary').innerText = `${quantities.quarter} × ₦${prices.quarter.toLocaleString()} = ₦${quarterTotal.toLocaleString()}`;
+    document.getElementById('summaryQuarter').style.display = 'block';
+    total += quarterTotal;
+  } else {
+    document.getElementById('summaryQuarter').style.display = 'none';
+  }
+  
+  // Update half summary
+  if (quantities.half > 0) {
+    const halfTotal = quantities.half * prices.half;
+    document.getElementById('halfSummary').innerText = `${quantities.half} × ₦${prices.half.toLocaleString()} = ₦${halfTotal.toLocaleString()}`;
+    document.getElementById('summaryHalf').style.display = 'block';
+    total += halfTotal;
+  } else {
+    document.getElementById('summaryHalf').style.display = 'none';
+  }
+  
+  // Update full summary
+  if (quantities.full > 0) {
+    const fullTotal = quantities.full * prices.full;
+    document.getElementById('fullSummary').innerText = `${quantities.full} × ₦${prices.full.toLocaleString()} = ₦${fullTotal.toLocaleString()}`;
+    document.getElementById('summaryFull').style.display = 'block';
+    total += fullTotal;
+  } else {
+    document.getElementById('summaryFull').style.display = 'none';
+  }
+  
+  // Update other amount
+  const otherVal = Number(document.getElementById('otherQty').value) || 0;
+  if (otherVal > 0) {
+    document.getElementById('otherSummary').innerText = `₦${otherVal.toLocaleString()}`;
+    document.getElementById('summaryOther').style.display = 'block';
+    total += otherVal;
+  } else {
+    document.getElementById('summaryOther').style.display = 'none';
+  }
+  
+  document.getElementById('summaryTotal').innerText = '₦' + total.toLocaleString();
+}
+
+document.getElementById('otherQty').oninput = () => {
+  document.querySelectorAll('.slot').forEach(s => s.classList.remove('active'));
+  updateSummary();
+};
+
+async function confirmBooking() {
+  const name = document.getElementById('bookingName').value;
+  const otherVal = Number(document.getElementById('otherQty').value) || 0;
+  
+  // Check if at least one slot type is selected or other amount is entered
+  const hasSlots = quantities.quarter > 0 || quantities.half > 0 || quantities.full > 0;
+  if (!name || (!hasSlots && otherVal <= 0)) {
+    alert('Please enter a name and select at least one slot type or enter a custom amount');
+    return;
+  }
+
+  // Calculate total
+  let total = otherVal;
+  total += quantities.quarter * prices.quarter;
+  total += quantities.half * prices.half;
+  total += quantities.full * prices.full;
+
+  const bookingData = {
+    userId: user.id,
+    name: name,
+    animalType: 'cow',
+    quarter: quantities.quarter,
+    half: quantities.half,
+    full: quantities.full,
+    total: total
+  };
+
+  const btn = document.querySelector('.confirm-btn');
+  const msg = document.getElementById('booking-confermation');
+  
+  btn.disabled = true;
+  btn.innerText = 'Processing...';
+
+  try {
+    const res = await fetch('/api/book', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bookingData)
+    });
+    const data = await res.json();
+    
+    if (res.ok) {
+      msg.innerText = data.message + ' (Total: ₦' + total.toLocaleString() + ')';
+      msg.className = 'success';
+      btn.innerText = '✓ Reservation Confirmed';
+      btn.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
+      
+      // Store booking data and redirect to confirmation page
+      const bookingConfirmation = {
+        name: name,
+        animal_type: 'cow',
+        quarter_qty: quantities.quarter,
+        half_qty: quantities.half,
+        full_qty: quantities.full,
+        total: total
+      };
+      sessionStorage.setItem('lastBooking', JSON.stringify(bookingConfirmation));
+      
+      setTimeout(() => {
+        window.location.href = 'confirmation.html';
+      }, 1000);
+    } else {
+      msg.innerText = data.message || 'Booking failed';
+      msg.className = 'error';
+      btn.disabled = false;
+      btn.innerText = 'Confirm Reservation';
+    }
+  } catch (err) {
+    msg.innerText = 'Failed to connect to server';
+    msg.className = 'error';
+    btn.disabled = false;
+    btn.innerText = 'Confirm Reservation';
+  }
+}
+</script>
+</body>
+</html>

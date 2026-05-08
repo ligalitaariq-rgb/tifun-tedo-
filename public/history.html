@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
+<title>Tifun-tedo - My History</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  color: white;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  background: linear-gradient(to right, #f0a060, #d46a3a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.history-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th {
+  text-align: left;
+  padding: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  color: #f0a060;
+  font-weight: 600;
+}
+
+td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.95rem;
+}
+
+tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-cow { background: #d46a3a33; color: #f0a060; }
+.badge-ram { background: #005c5c33; color: #00ffff; }
+.badge-goat { background: #5c5c0033; color: #ffff00; }
+
+.empty-state {
+  text-align: center;
+  padding: 50px;
+  opacity: 0.6;
+}
+
+.empty-state i {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Booking History</h1>
+    <a href="selection.html" class="back-btn">← Back to Selection</a>
+  </div>
+
+  <div class="history-card">
+    <table id="historyTable" style="display: none;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Animal</th>
+          <th>Reserved For</th>
+          <th>Slots (Q/H/F)</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="historyBody">
+      </tbody>
+    </table>
+
+    <div id="loading" class="empty-state">
+      <p>Loading your history...</p>
+    </div>
+
+    <div id="noData" class="empty-state" style="display: none;">
+      <i>📦</i>
+      <p>No bookings found yet. Time to get some meat!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem('user'));
+if (!user) window.location.href = 'index.html';
+
+async function loadHistory() {
+  try {
+    const res = await fetch(`/api/history/${user.id}`);
+    const data = await res.json();
+
+    document.getElementById('loading').style.display = 'none';
+
+    if (data.length > 0) {
+      const body = document.getElementById('historyBody');
+      data.forEach(item => {
+        const date = new Date(item.created_at).toLocaleDateString(undefined, {
+          year: 'numeric', month: 'short', day: 'numeric'
+        });
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${date}</td>
+          <td><span class="badge badge-${item.animal_type}">${item.animal_type}</span></td>
+          <td>${item.name}</td>
+          <td>${item.quarter_qty} / ${item.half_qty} / ${item.full_qty}</td>
+          <td>₦${Number(item.total).toLocaleString()}</td>
+        `;
+        body.appendChild(row);
+      });
+      document.getElementById('historyTable').style.display = 'table';
+    } else {
+      document.getElementById('noData').style.display = 'block';
+    }
+  } catch (err) {
+    document.getElementById('loading').innerText = 'Error loading history.';
+  }
+}
+
+loadHistory();
+</script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
+<title>Tifun-tedo - Booking Confirmation</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  padding: 20px 0;
+  color: white;
+}
+
+/* ===================== ANIMATED BACKGROUND ===================== */
+.bg-animation {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-item {
+  position: absolute;
+  bottom: -120px;
+  font-size: 48px;
+  opacity: 0;
+  animation: floatUp linear infinite;
+  filter: drop-shadow(0 0 8px rgba(212, 106, 58, 0.4));
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg) scale(0.8);   opacity: 0; }
+  10%  { opacity: 0.35; }
+  80%  { opacity: 0.25; }
+  100% { transform: translateY(-110vh) rotate(360deg) scale(1.1); opacity: 0; }
+}
+
+.bg-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s;   font-size: 40px; }
+.bg-item:nth-child(2)  { left: 12%; animation-duration: 12s; animation-delay: 1.5s; font-size: 55px; }
+.bg-item:nth-child(3)  { left: 22%; animation-duration: 10s; animation-delay: 0.8s; font-size: 38px; }
+.bg-item:nth-child(4)  { left: 30%; animation-duration: 14s; animation-delay: 3s;   font-size: 50px; }
+.bg-item:nth-child(5)  { left: 42%; animation-duration: 8s;  animation-delay: 2s;   font-size: 44px; }
+.bg-item:nth-child(6)  { left: 53%; animation-duration: 11s; animation-delay: 0.4s; font-size: 36px; }
+.bg-item:nth-child(7)  { left: 63%; animation-duration: 13s; animation-delay: 4s;   font-size: 52px; }
+.bg-item:nth-child(8)  { left: 72%; animation-duration: 9.5s;animation-delay: 1s;   font-size: 42px; }
+.bg-item:nth-child(9)  { left: 82%; animation-duration: 12s; animation-delay: 2.5s; font-size: 46px; }
+.bg-item:nth-child(10) { left: 91%; animation-duration: 10s; animation-delay: 3.5s; font-size: 40px; }
+
+/* ===================== CARD ===================== */
+.card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.97);
+  width: 360px;
+  max-width: 90%;
+  padding: 28px 25px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,150,80,0.15);
+  backdrop-filter: blur(4px);
+  margin: 30px auto;
+  color: #333;
+}
+
+.success-icon {
+  text-align: center;
+  font-size: 60px;
+  margin-bottom: 15px;
+  animation: scaleIn 0.6s ease-out;
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+h1 {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+.booking-details {
+  background: #fdf5f0;
+  padding: 18px;
+  border-radius: 15px;
+  margin: 20px 0;
+  border: 1px solid #f9e1d0;
+}
+
+.booking-details strong {
+  color: #7a2e10;
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.detail-row {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-row span:first-child {
+  font-weight: 600;
+}
+
+.total-row {
+  border-top: 2px solid #ddd;
+  margin-top: 12px;
+  padding-top: 12px;
+  font-weight: bold;
+  color: #2d0d00;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #2e7d32, #43a047);
+  color: white;
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(46, 125, 50, 0.4);
+}
+
+.secondary-btn {
+  background: #f5f5f5;
+  color: #333;
+  border: 2px solid #ddd;
+}
+
+.secondary-btn:hover {
+  background: #efefef;
+  border-color: #d46a3a;
+}
+
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.3);
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateX(-5px);
+}
+</style>
+</head>
+<body>
+
+<a href="selection.html" class="back-btn">← Back to Selection</a>
+
+<div class="bg-animation">
+  <div class="bg-item">🐄</div>
+  <div class="bg-item">🥩</div>
+  <div class="bg-item">🍖</div>
+  <div class="bg-item">🐄</div>
+  <div class="bg-item">🥩</div>
+  <div class="bg-item">🍖</div>
+</div>
+
+<div class="card">
+  <div class="success-icon">✅</div>
+  
+  <h1>Booking Confirmed!</h1>
+  <p class="subtitle">Your reservation has been successfully saved</p>
+
+  <div class="booking-details">
+    <strong>Booking Details</strong>
+    
+    <div class="detail-row">
+      <span>Name:</span>
+      <span id="detailName">-</span>
+    </div>
+    
+    <div class="detail-row">
+      <span>Animal Type:</span>
+      <span id="detailAnimal">-</span>
+    </div>
+
+    <div id="quarterSection" style="display:none;" class="detail-row">
+      <span>Quarter:</span>
+      <span id="detailQuarter">-</span>
+    </div>
+
+    <div id="halfSection" style="display:none;" class="detail-row">
+      <span>Half:</span>
+      <span id="detailHalf">-</span>
+    </div>
+
+    <div id="fullSection" style="display:none;" class="detail-row">
+      <span>Full:</span>
+      <span id="detailFull">-</span>
+    </div>
+
+    <div class="total-row">
+      <span>Total Amount:</span>
+      <span id="detailTotal">-</span>
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button class="secondary-btn" onclick="window.location.href='selection.html'">Book Another</button>
+    <button class="primary-btn" onclick="window.location.href='history.html'">View History</button>
+  </div>
+</div>
+
+<script>
+// Get booking data from URL parameters or session storage
+const params = new URLSearchParams(window.location.search);
+let booking = null;
+
+// Try to get from sessionStorage first (preferred method)
+if (sessionStorage.getItem('lastBooking')) {
+  booking = JSON.parse(sessionStorage.getItem('lastBooking'));
+  sessionStorage.removeItem('lastBooking');
+}
+
+// Fallback to URL parameters
+if (!booking) {
+  booking = {
+    name: params.get('name') || 'Unknown',
+    animal_type: params.get('animal') || 'unknown',
+    quarter_qty: parseInt(params.get('quarter')) || 0,
+    half_qty: parseInt(params.get('half')) || 0,
+    full_qty: parseInt(params.get('full')) || 0,
+    total: parseInt(params.get('total')) || 0
+  };
+}
+
+// Display booking information
+document.getElementById('detailName').innerText = booking.name;
+document.getElementById('detailAnimal').innerText = booking.animal_type.charAt(0).toUpperCase() + booking.animal_type.slice(1);
+document.getElementById('detailTotal').innerText = '₦' + (booking.total || 0).toLocaleString();
+
+const prices = { quarter: 3250, half: 6500, full: 13000 };
+
+if (booking.quarter_qty > 0) {
+  document.getElementById('quarterSection').style.display = 'flex';
+  document.getElementById('detailQuarter').innerText = `${booking.quarter_qty} × ₦${prices.quarter.toLocaleString()} = ₦${(booking.quarter_qty * prices.quarter).toLocaleString()}`;
+}
+
+if (booking.half_qty > 0) {
+  document.getElementById('halfSection').style.display = 'flex';
+  document.getElementById('detailHalf').innerText = `${booking.half_qty} × ₦${prices.half.toLocaleString()} = ₦${(booking.half_qty * prices.half).toLocaleString()}`;
+}
+
+if (booking.full_qty > 0) {
+  document.getElementById('fullSection').style.display = 'flex';
+  document.getElementById('detailFull').innerText = `${booking.full_qty} × ₦${prices.full.toLocaleString()} = ₦${(booking.full_qty * prices.full).toLocaleString()}`;
+}
+</script>
+
+</body>
+</html>

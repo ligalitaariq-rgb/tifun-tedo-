@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
+<title>Tifun-tedo - Select Animal</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: white;
+  overflow-x: hidden;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  background: linear-gradient(to right, #f0a060, #d46a3a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.animal-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.animal-card:hover {
+  transform: translateY(-15px) scale(1.05);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(212, 106, 58, 0.5);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.animal-card i {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.animal-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.animal-card p {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.btn {
+  background: linear-gradient(135deg, #c24d2c, #e37a3f);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.animal-card:hover .btn {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(194, 77, 44, 0.4);
+}
+
+.nav-links {
+  margin-top: 50px;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: #f0a060;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.nav-links a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.user-welcome {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-welcome span {
+  font-weight: 600;
+}
+
+.logout-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.logout-btn:hover {
+  background: rgba(255,0,0,0.2);
+}
+</style>
+</head>
+<body>
+
+<div class="user-welcome">
+  <span id="welcomeName">Hello, User</span>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="header">
+  <h1>Choose Your Animal</h1>
+  <p>Select the type of meat you'd like to book today</p>
+</div>
+
+<div class="selection-grid">
+  <div class="animal-card" onclick="location.href='cow.html'">
+    <i>🐄</i>
+    <h2>Cow</h2>
+    <p>Premium beef slots from healthy herds.</p>
+    <button class="btn">Book Cow</button>
+  </div>
+
+  <div class="animal-card" onclick="location.href='ram.html'">
+    <i>🐏</i>
+    <h2>Ram</h2>
+    <p>Special ram slots for your celebrations.</p>
+    <button class="btn">Book Ram</button>
+  </div>
+
+  <div class="animal-card" onclick="location.href='goat.html'">
+    <i>🐐</i>
+    <h2>Goat</h2>
+    <p>Fresh goat meat slots for the best taste.</p>
+    <button class="btn">Book Goat</button>
+  </div>
+</div>
+
+<div class="nav-links">
+  <a href="history.html">View My Booking History</a>
+  <a href="about developer .html">About Developer</a>
+  <a id="adminDashboardLink" href="admin.html" style="display:none;">Admin Dashboard</a>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem('user'));
+if (!user) {
+  window.location.href = 'index.html';
+} else {
+  document.getElementById('welcomeName').innerText = 'Hello, ' + user.username;
+  if (user.isAdmin) {
+    document.getElementById('adminDashboardLink').style.display = 'inline-block';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('user');
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>
