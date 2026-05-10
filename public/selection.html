@@ -144,7 +144,99 @@ body {
 .logout-btn:hover {
   background: rgba(255,0,0,0.2);
 }
+
+  /* ===================== SPONSORED SECTION ===================== */
+  .sponsored-section {
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 60px;
+    position: relative;
+  }
+
+  .sponsored-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 15px;
+    display: block;
+    text-align: center;
+  }
+
+  .sponsored-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+  }
+
+  .sponsored-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(240, 160, 96, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .sponsored-image {
+    width: 300px;
+    height: 200px;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+
+  .sponsored-content {
+    flex: 1;
+  }
+
+  .sponsored-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #ffffff, #f0a060);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .sponsored-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.8;
+    margin-bottom: 20px;
+  }
+
+  .sponsored-tag {
+    display: inline-block;
+    padding: 6px 15px;
+    background: rgba(240, 160, 96, 0.15);
+    border: 1px solid rgba(240, 160, 96, 0.3);
+    border-radius: 20px;
+    color: #f0a060;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .sponsored-card {
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+    .sponsored-image {
+      width: 100%;
+      height: 180px;
+    }
+  }
 </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6337324788887299"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -181,9 +273,24 @@ body {
   </div>
 </div>
 
+<!-- SPONSORED CONTENT -->
+<div class="sponsored-section">
+  <span class="sponsored-label">Featured Recommendation</span>
+  <a href="#" class="sponsored-card">
+    <img src="ad-placeholder.png" alt="Premium Seasoning" class="sponsored-image">
+    <div class="sponsored-content">
+      <div class="sponsored-tag">Partner Offer</div>
+      <h3>Elevate Your Feast</h3>
+      <p>Master the art of the grill with our Chef-selected premium seasoning kits. Perfect for the premium cuts you book today.</p>
+      <button class="btn" style="padding: 10px 20px; font-size: 0.9rem;">View Collection</button>
+    </div>
+  </a>
+</div>
+
 <div class="nav-links">
   <a href="history.html">View My Booking History</a>
   <a href="about developer .html">About Developer</a>
+  <a href="tel:08058462020" style="color: #ff9d5c;">Customer Care: 08058462020</a>
   <a id="adminDashboardLink" href="admin.html" style="display:none;">Admin Dashboard</a>
 </div>
 

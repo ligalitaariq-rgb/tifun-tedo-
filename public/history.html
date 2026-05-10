@@ -106,7 +106,63 @@ tr:hover td {
   display: block;
   margin-bottom: 20px;
 }
+
+/* Responsive Table */
+@media screen and (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .history-card {
+    padding: 15px;
+  }
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 10px;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+    min-height: 45px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  td:last-child {
+    border-bottom: none;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #f0a060;
+    text-align: left;
+  }
+}
 </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6337324788887299"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -162,11 +218,11 @@ async function loadHistory() {
         
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${date}</td>
-          <td><span class="badge badge-${item.animal_type}">${item.animal_type}</span></td>
-          <td>${item.name}</td>
-          <td>${item.quarter_qty} / ${item.half_qty} / ${item.full_qty}</td>
-          <td>₦${Number(item.total).toLocaleString()}</td>
+          <td data-label="Date">${date}</td>
+          <td data-label="Animal"><span class="badge badge-${item.animal_type}">${item.animal_type}</span></td>
+          <td data-label="Reserved For">${item.name}</td>
+          <td data-label="Slots (Q/H/F)">${item.quarter_qty} / ${item.half_qty} / ${item.full_qty}</td>
+          <td data-label="Total">₦${Number(item.total).toLocaleString()}</td>
         `;
         body.appendChild(row);
       });
