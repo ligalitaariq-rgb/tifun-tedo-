@@ -1,443 +1,797 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
-<title>Tifun-tedo - Ram Booking</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
+  <title>Tifun-tedo - Ram Booking</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #001a1a 0%, #003b3b 40%, #005c5c 70%, #002d2d 100%);
-  display: block;
-  width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-  padding: 20px 0;
-  color: white;
-}
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #001a1a 0%, #003b3b 40%, #005c5c 70%, #002d2d 100%);
+      display: block;
+      width: 100%;
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px 0;
+      color: white;
+    }
 
-/* ===================== ANIMATED BACKGROUND ===================== */
-.bg-animation {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
+    /* ===================== ANIMATED BACKGROUND ===================== */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
 
-.bg-item {
-  position: absolute;
-  bottom: -120px;
-  font-size: 48px;
-  opacity: 0;
-  animation: floatUp linear infinite;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 212, 0.4));
-}
+    .bg-item {
+      position: absolute;
+      bottom: -120px;
+      font-size: 48px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 0 8px rgba(0, 212, 212, 0.4));
+    }
 
-@keyframes floatUp {
-  0%   { transform: translateY(0) rotate(0deg) scale(0.8);   opacity: 0; }
-  10%  { opacity: 0.35; }
-  80%  { opacity: 0.25; }
-  100% { transform: translateY(-110vh) rotate(360deg) scale(1.1); opacity: 0; }
-}
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
 
-.bg-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s;   font-size: 40px; }
-.bg-item:nth-child(2)  { left: 12%; animation-duration: 12s; animation-delay: 1.5s; font-size: 55px; }
-.bg-item:nth-child(3)  { left: 22%; animation-duration: 10s; animation-delay: 0.8s; font-size: 38px; }
-.bg-item:nth-child(4)  { left: 30%; animation-duration: 14s; animation-delay: 3s;   font-size: 50px; }
+      10% {
+        opacity: 0.35;
+      }
 
-/* ===================== CARD ===================== */
-.card {
-  position: relative;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.97);
-  width: 360px;
-  max-width: 90%;
-  padding: 28px 25px;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,255,255,0.15);
-  backdrop-filter: blur(4px);
-  margin: 30px auto;
-  color: #333;
-}
+      80% {
+        opacity: 0.25;
+      }
 
-.logo-container {
-  text-align: center;
-  margin-bottom: 15px;
-}
+      100% {
+        transform: translateY(-110vh) rotate(360deg) scale(1.1);
+        opacity: 0;
+      }
+    }
 
-img.logo {
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
+    .bg-item:nth-child(1) {
+      left: 5%;
+      animation-duration: 9s;
+      animation-delay: 0s;
+      font-size: 40px;
+    }
 
-h1 { text-align: center; color: #002d2d; margin-top: 5px; font-size: 1.8rem; }
-.subtitle { text-align: center; color: #666; margin-bottom: 20px; font-weight: 500; }
+    .bg-item:nth-child(2) {
+      left: 12%;
+      animation-duration: 12s;
+      animation-delay: 1.5s;
+      font-size: 55px;
+    }
 
-label { font-size: 0.85rem; font-weight: 600; color: #555; display: block; margin-top: 15px; margin-bottom: 5px; }
+    .bg-item:nth-child(3) {
+      left: 22%;
+      animation-duration: 10s;
+      animation-delay: 0.8s;
+      font-size: 38px;
+    }
 
-input[type="text"], input[type="number"] {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1.5px solid #ddd;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  outline: none;
-}
-input[type="text"]:focus, input[type="number"]:focus {
-  border-color: #005c5c;
-  background: #f0ffff;
-  box-shadow: 0 0 0 3px rgba(0, 92, 92, 0.1);
-}
+    .bg-item:nth-child(4) {
+      left: 30%;
+      animation-duration: 14s;
+      animation-delay: 3s;
+      font-size: 50px;
+    }
 
-.slots {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-top: 8px;
-}
-.slot-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.slot {
-  border: 2px solid #eee;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  background: white;
-}
-.slot:hover  { border-color: #005c5c; background: #f0ffff; transform: translateY(-2px); }
-.slot.active { border-color: #005c5c; background: #e0ffff; color: #005c5c; }
+    /* ===================== CARD ===================== */
+    .card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.97);
+      width: 360px;
+      max-width: 90%;
+      padding: 28px 25px;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      margin: 30px auto;
+      color: #333;
+    }
 
-.slot-counter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  padding: 8px;
-  background: #f9f9f9;
-  border-radius: 8px;
-}
-.slot-counter button {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  background: #f0f0f0;
-  color: #333;
-  transition: all 0.2s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.slot-counter button:hover { background: #005c5c; color: white; }
-.slot-counter span { font-size: 1.2rem; font-weight: 800; color: #005c5c; min-width: 30px; text-align: center; }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 15px;
+    }
 
-.summary {
-  background: #f0ffff;
-  padding: 18px;
-  border-radius: 15px;
-  margin: 20px 0;
-  border: 1px solid #c0ffff;
-}
-.summary strong { color: #004d4d; display: block; margin-bottom: 8px; font-size: 0.9rem; }
-.summary p { font-size: 0.85rem; color: #555; margin-bottom: 4px; display: flex; justify-content: space-between; }
+    img.logo {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-.confirm-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #005c5c, #008b8b);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 20px rgba(0, 92, 92, 0.3);
-}
-.confirm-btn:hover  { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0, 92, 92, 0.4); opacity: 0.95; }
-.confirm-btn:active { transform: scale(0.98); }
+    h1 {
+      text-align: center;
+      color: #002d2d;
+      margin-top: 5px;
+      font-size: 1.8rem;
+    }
 
-#booking-confermation {
-  margin-top: 15px;
-  text-align: center;
-  font-size: 0.9rem;
-  padding: 12px;
-  border-radius: 10px;
-  display: none;
-}
-#booking-confermation.success { background: #e8f5e9; color: #2e7d32; display: block; }
-#booking-confermation.error { background: #ffebee; color: #c62828; display: block; }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
 
-.back-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(10px);
-  padding: 10px 20px;
-  border-radius: 12px;
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  border: 1px solid rgba(255,255,255,0.3);
-  transition: all 0.3s ease;
-}
-.back-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-5px); }
-</style>
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #555;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1.5px solid #ddd;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #005c5c;
+      background: #f0ffff;
+      box-shadow: 0 0 0 3px rgba(0, 92, 92, 0.1);
+    }
+
+    .slots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 8px;
+    }
+
+    .slot-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slot {
+      border: 2px solid #eee;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      background: white;
+    }
+
+    .slot:hover {
+      border-color: #005c5c;
+      background: #f0ffff;
+      transform: translateY(-2px);
+    }
+
+    .slot.active {
+      border-color: #005c5c;
+      background: #e0ffff;
+      color: #005c5c;
+    }
+
+    .slot-counter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      padding: 8px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .slot-counter button {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background: #f0f0f0;
+      color: #333;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slot-counter button:hover {
+      background: #005c5c;
+      color: white;
+    }
+
+    .slot-counter span {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #005c5c;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .summary {
+      background: #f0ffff;
+      padding: 18px;
+      border-radius: 15px;
+      margin: 20px 0;
+      border: 1px solid #c0ffff;
+    }
+
+    .summary strong {
+      color: #004d4d;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .summary p {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .confirm-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #005c5c, #008b8b);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 92, 92, 0.3);
+    }
+
+    .confirm-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0, 92, 92, 0.4);
+      opacity: 0.95;
+    }
+
+    .confirm-btn:active {
+      transform: scale(0.98);
+    }
+
+    #booking-confermation {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 12px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    #booking-confermation.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      display: block;
+    }
+
+    #booking-confermation.error {
+      background: #ffebee;
+      color: #c62828;
+      display: block;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(-5px);
+    }
+
+    /* ===================== PAYMENT MODAL ===================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .payment-modal {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 20px;
+      padding: 30px;
+      color: #333;
+      position: relative;
+      animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes modalSlideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .payment-modal h2 {
+      color: #002d2d;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .bank-details {
+      background: #f0ffff;
+      border: 1px dashed #005c5c;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+    }
+
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .bank-row span:first-child {
+      color: #666;
+      font-weight: 500;
+    }
+
+    .bank-row span:last-child {
+      color: #002d2d;
+      font-weight: 700;
+    }
+
+    .copy-btn {
+      background: none;
+      border: none;
+      color: #005c5c;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-left: 5px;
+    }
+
+    .modal-total {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #005c5c;
+      margin: 15px 0;
+    }
+
+    .modal-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .paid-btn {
+      background: linear-gradient(135deg, #2e7d32, #43a047);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .cancel-modal {
+      background: #f0f0f0;
+      color: #666;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6337324788887299"
-     crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
+
 <body>
 
-<a href="selection.html" class="back-btn">← Back to Selection</a>
+  <a href="selection.html" class="back-btn">← Back to Selection</a>
 
-<div class="bg-animation">
-  <div class="bg-item">🐏</div>
-  <div class="bg-item">🥩</div>
-  <div class="bg-item">🍖</div>
-  <div class="bg-item">🐏</div>
-</div>
-
-<div class="card">
-  <div class="logo-container">
-    <img src="Screenshot 2025-12-28 085733.jpg" alt="Logo" class="logo">
+  <div class="bg-animation">
+    <div class="bg-item">🐏</div>
+    <div class="bg-item">🥩</div>
+    <div class="bg-item">🍖</div>
+    <div class="bg-item">🐏</div>
   </div>
 
-  <h1>Ram Booking</h1>
-  <p class="subtitle">Quality Ram Meat Reservation</p>
+  <div class="card">
+    <div class="logo-container">
+      <img src="Screenshot 2025-12-28 085733.jpg" alt="Logo" class="logo">
+    </div>
 
-  <label>Reservation Name</label>
-  <input type="text" id="bookingName" placeholder="Enter name for reservation" required />
+    <h1>Ram Booking</h1>
+    <p class="subtitle">Quality Ram Meat Reservation</p>
 
-  <label>Select Slot Types & Quantities</label>
-  <div class="slots">
-    <div class="slot-group">
-      <div class="slot" data-type="quarter" onclick="toggleSlot('quarter')">Quarter<br><small>₦6,250</small></div>
-      <div class="slot-counter" id="quarterCounter" style="display:none;">
-        <button type="button" onclick="changeQty('quarter', -1)">−</button>
-        <span id="quarterQty">1</span>
-        <button type="button" onclick="changeQty('quarter', 1)">+</button>
+    <label>Reservation Name</label>
+    <input type="text" id="bookingName" placeholder="Enter name for reservation" required />
+
+    <label>Email Address</label>
+    <input type="email" id="bookingEmail" placeholder="Enter your email for payment receipt" required
+      style="width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid #ddd; font-size: 0.95rem; margin-bottom: 15px;" />
+
+    <label>Select Slot Types & Quantities</label>
+    <div class="slots">
+      <div class="slot-group">
+        <div class="slot" data-type="quarter" onclick="toggleSlot('quarter')">Quarter<br><small>₦6,250</small></div>
+        <div class="slot-counter" id="quarterCounter" style="display:none;">
+          <button type="button" onclick="changeQty('quarter', -1)">−</button>
+          <span id="quarterQty">1</span>
+          <button type="button" onclick="changeQty('quarter', 1)">+</button>
+        </div>
+      </div>
+      <div class="slot-group">
+        <div class="slot" data-type="half" onclick="toggleSlot('half')">Half<br><small>₦12,250</small></div>
+        <div class="slot-counter" id="halfCounter" style="display:none;">
+          <button type="button" onclick="changeQty('half', -1)">−</button>
+          <span id="halfQty">1</span>
+          <button type="button" onclick="changeQty('half', 1)">+</button>
+        </div>
+      </div>
+      <div class="slot-group">
+        <div class="slot" data-type="full" onclick="toggleSlot('full')">Full<br><small>₦25,000</small></div>
+        <div class="slot-counter" id="fullCounter" style="display:none;">
+          <button type="button" onclick="changeQty('full', -1)">−</button>
+          <span id="fullQty">1</span>
+          <button type="button" onclick="changeQty('full', 1)">+</button>
+        </div>
+      </div>
+      <div class="slot-group">
+        <div class="slot" style="padding: 10px;"><input type="number" id="otherQty" class="input" placeholder="Other ₦"
+            style="border:none; text-align:center; padding:5px;"></div>
       </div>
     </div>
-    <div class="slot-group">
-      <div class="slot" data-type="half" onclick="toggleSlot('half')">Half<br><small>₦12,250</small></div>
-      <div class="slot-counter" id="halfCounter" style="display:none;">
-        <button type="button" onclick="changeQty('half', -1)">−</button>
-        <span id="halfQty">1</span>
-        <button type="button" onclick="changeQty('half', 1)">+</button>
+
+    <div class="summary">
+      <strong>Booking Summary</strong>
+      <div id="summaryBreakdown">
+        <p id="summaryQuarter" style="display:none;"><span>Quarter:</span> <span id="quarterSummary">0</span></p>
+        <p id="summaryHalf" style="display:none;"><span>Half:</span> <span id="halfSummary">0</span></p>
+        <p id="summaryFull" style="display:none;"><span>Full:</span> <span id="fullSummary">0</span></p>
+        <p id="summaryOther" style="display:none;"><span>Other:</span> <span id="otherSummary">₦0</span></p>
       </div>
+      <p style="border-top: 1px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: bold; color: #002d2d;">
+        <span>Total:</span> <span id="summaryTotal">₦0</span>
+      </p>
     </div>
-    <div class="slot-group">
-      <div class="slot" data-type="full" onclick="toggleSlot('full')">Full<br><small>₦25,000</small></div>
-      <div class="slot-counter" id="fullCounter" style="display:none;">
-        <button type="button" onclick="changeQty('full', -1)">−</button>
-        <span id="fullQty">1</span>
-        <button type="button" onclick="changeQty('full', 1)">+</button>
+
+    <button class="confirm-btn" onclick="confirmBooking()">Confirm Reservation</button>
+    <div id="booking-confermation"></div>
+    <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: #666;">
+      Need help? <a href="tel:08058462020" style="color: #005c5c; text-decoration: none; font-weight: 600;">Call
+        Customer Care: 08058462020</a>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal-overlay">
+    <div class="payment-modal">
+      <h2>Complete Payment</h2>
+      <p style="text-align: center; font-size: 0.9rem; color: #666;">Pay securely to confirm your reservation.</p>
+
+      <div class="modal-total" id="modalTotal">₦0</div>
+
+      <div class="modal-btns">
+        <button class="paid-btn" onclick="processFinalBooking()">💳 Pay Now</button>
+        <button class="cancel-modal" onclick="closeModal()">Cancel</button>
       </div>
-    </div>
-    <div class="slot-group">
-      <div class="slot" style="padding: 10px;"><input type="number" id="otherQty" class="input" placeholder="Other ₦" style="border:none; text-align:center; padding:5px;"></div>
+
+      <p style="text-align: center; font-size: 0.75rem; color: #999; margin-top: 15px;">Powered by Paystack — Card, Bank
+        Transfer & USSD accepted.</p>
+
+      <details style="margin-top: 15px; cursor: pointer;">
+        <summary style="font-size: 0.82rem; color: #888; text-align: center;">Or pay via direct bank transfer</summary>
+        <div class="bank-details" style="margin-top: 10px;">
+          <div class="bank-row">
+            <span>Bank:</span>
+            <span>Lotus Bank</span>
+          </div>
+          <div class="bank-row">
+            <span>Account Name:</span>
+            <span>Ligali Deji Jamiu</span>
+          </div>
+          <div class="bank-row">
+            <span>Account Number:</span>
+            <span>1004890736 <button class="copy-btn" onclick="copyAccount()">Copy</button></span>
+          </div>
+        </div>
+        <p style="font-size: 0.75rem; color: #aaa; text-align: center; margin-top: 8px;">If you transfer directly,
+          contact us for manual verification.</p>
+      </details>
     </div>
   </div>
 
-  <div class="summary">
-    <strong>Booking Summary</strong>
-    <div id="summaryBreakdown">
-      <p id="summaryQuarter" style="display:none;"><span>Quarter:</span> <span id="quarterSummary">0</span></p>
-      <p id="summaryHalf" style="display:none;"><span>Half:</span> <span id="halfSummary">0</span></p>
-      <p id="summaryFull" style="display:none;"><span>Full:</span> <span id="fullSummary">0</span></p>
-      <p id="summaryOther" style="display:none;"><span>Other:</span> <span id="otherSummary">₦0</span></p>
-    </div>
-    <p style="border-top: 1px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: bold; color: #002d2d;">
-      <span>Total:</span> <span id="summaryTotal">₦0</span>
-    </p>
-  </div>
+  <script>
+    let quantities = { quarter: 0, half: 0, full: 0 };
+    const prices = { quarter: 6250, half: 12250, full: 25000 };
 
-  <button class="confirm-btn" onclick="confirmBooking()">Confirm Reservation</button>
-  <div id="booking-confermation"></div>
-  <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: #666;">
-    Need help? <a href="tel:08058462020" style="color: #005c5c; text-decoration: none; font-weight: 600;">Call Customer Care: 08058462020</a>
-  </div>
-</div>
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) window.location.href = 'index.html';
 
-<script>
-let quantities = { quarter: 0, half: 0, full: 0 };
-const prices = { quarter: 6250, half: 12250, full: 25000 };
+    function toggleSlot(type) {
+      const slot = document.querySelector(`[data-type="${type}"]`);
+      const counter = document.getElementById(`${type}Counter`);
 
-const user = JSON.parse(localStorage.getItem('user'));
-if (!user) window.location.href = 'index.html';
-
-function toggleSlot(type) {
-  const slot = document.querySelector(`[data-type="${type}"]`);
-  const counter = document.getElementById(`${type}Counter`);
-  
-  if (quantities[type] > 0) {
-    // Deselect
-    quantities[type] = 0;
-    slot.classList.remove('active');
-    counter.style.display = 'none';
-  } else {
-    // Select with quantity 1
-    quantities[type] = 1;
-    slot.classList.add('active');
-    counter.style.display = 'flex';
-    document.getElementById(`${type}Qty`).innerText = 1;
-  }
-  updateSummary();
-}
-
-function changeQty(type, delta) {
-  quantities[type] = Math.max(0, quantities[type] + delta);
-  if (quantities[type] === 0) {
-    // If quantity becomes 0, deselect the slot
-    toggleSlot(type);
-    return;
-  }
-  document.getElementById(`${type}Qty`).innerText = quantities[type];
-  updateSummary();
-}
-
-function updateSummary() {
-  let total = 0;
-  
-  // Update quarter summary
-  if (quantities.quarter > 0) {
-    const quarterTotal = quantities.quarter * prices.quarter;
-    document.getElementById('quarterSummary').innerText = `${quantities.quarter} × ₦${prices.quarter.toLocaleString()} = ₦${quarterTotal.toLocaleString()}`;
-    document.getElementById('summaryQuarter').style.display = 'block';
-    total += quarterTotal;
-  } else {
-    document.getElementById('summaryQuarter').style.display = 'none';
-  }
-  
-  // Update half summary
-  if (quantities.half > 0) {
-    const halfTotal = quantities.half * prices.half;
-    document.getElementById('halfSummary').innerText = `${quantities.half} × ₦${prices.half.toLocaleString()} = ₦${halfTotal.toLocaleString()}`;
-    document.getElementById('summaryHalf').style.display = 'block';
-    total += halfTotal;
-  } else {
-    document.getElementById('summaryHalf').style.display = 'none';
-  }
-  
-  // Update full summary
-  if (quantities.full > 0) {
-    const fullTotal = quantities.full * prices.full;
-    document.getElementById('fullSummary').innerText = `${quantities.full} × ₦${prices.full.toLocaleString()} = ₦${fullTotal.toLocaleString()}`;
-    document.getElementById('summaryFull').style.display = 'block';
-    total += fullTotal;
-  } else {
-    document.getElementById('summaryFull').style.display = 'none';
-  }
-  
-  // Update other amount
-  const otherVal = Number(document.getElementById('otherQty').value) || 0;
-  if (otherVal > 0) {
-    document.getElementById('otherSummary').innerText = `₦${otherVal.toLocaleString()}`;
-    document.getElementById('summaryOther').style.display = 'block';
-    total += otherVal;
-  } else {
-    document.getElementById('summaryOther').style.display = 'none';
-  }
-  
-  document.getElementById('summaryTotal').innerText = '₦' + total.toLocaleString();
-}
-
-document.getElementById('otherQty').oninput = updateSummary;
-
-async function confirmBooking() {
-  const name = document.getElementById('bookingName').value;
-  const otherVal = Number(document.getElementById('otherQty').value) || 0;
-  
-  // Check if at least one slot type is selected or other amount is entered
-  const hasSlots = quantities.quarter > 0 || quantities.half > 0 || quantities.full > 0;
-  if (!name || (!hasSlots && otherVal <= 0)) {
-    alert('Please enter a name and select at least one slot type or enter a custom amount');
-    return;
-  }
-
-  // Calculate total
-  let total = otherVal;
-  total += quantities.quarter * prices.quarter;
-  total += quantities.half * prices.half;
-  total += quantities.full * prices.full;
-
-  const bookingData = {
-    userId: user.id,
-    name: name,
-    animalType: 'ram',
-    quarter: quantities.quarter,
-    half: quantities.half,
-    full: quantities.full,
-    total: total
-  };
-
-  const btn = document.querySelector('.confirm-btn');
-  const msg = document.getElementById('booking-confermation');
-  
-  btn.disabled = true;
-  btn.innerText = 'Processing...';
-
-  try {
-    const res = await fetch('/api/book', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bookingData)
-    });
-    const data = await res.json();
-    
-    if (res.ok) {
-      msg.innerText = data.message + ' (Total: ₦' + total.toLocaleString() + ')';
-      msg.className = 'success';
-      btn.innerText = '✓ Reservation Confirmed';
-      btn.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
-      
-      // Store booking data and redirect to confirmation page
-      const bookingConfirmation = {
-        name: name,
-        animal_type: 'ram',
-        quarter_qty: quantities.quarter,
-        half_qty: quantities.half,
-        full_qty: quantities.full,
-        total: total
-      };
-      sessionStorage.setItem('lastBooking', JSON.stringify(bookingConfirmation));
-      
-      setTimeout(() => {
-        window.location.href = 'confirmation.html';
-      }, 1000);
-    } else {
-      msg.innerText = data.message || 'Booking failed';
-      msg.className = 'error';
-      btn.disabled = false;
-      btn.innerText = 'Confirm Reservation';
+      if (quantities[type] > 0) {
+        // Deselect
+        quantities[type] = 0;
+        slot.classList.remove('active');
+        counter.style.display = 'none';
+      } else {
+        // Select with quantity 1
+        quantities[type] = 1;
+        slot.classList.add('active');
+        counter.style.display = 'flex';
+        document.getElementById(`${type}Qty`).innerText = 1;
+      }
+      updateSummary();
     }
-  } catch (err) {
-    msg.innerText = 'Failed to connect to server';
-    msg.className = 'error';
-    btn.disabled = false;
-    btn.innerText = 'Confirm Reservation';
-  }
-}
-</script>
+
+    function changeQty(type, delta) {
+      quantities[type] = Math.max(0, quantities[type] + delta);
+      if (quantities[type] === 0) {
+        // If quantity becomes 0, deselect the slot
+        toggleSlot(type);
+        return;
+      }
+      document.getElementById(`${type}Qty`).innerText = quantities[type];
+      updateSummary();
+    }
+
+    function updateSummary() {
+      let total = 0;
+
+      // Update quarter summary
+      if (quantities.quarter > 0) {
+        const quarterTotal = quantities.quarter * prices.quarter;
+        document.getElementById('quarterSummary').innerText = `${quantities.quarter} × ₦${prices.quarter.toLocaleString()} = ₦${quarterTotal.toLocaleString()}`;
+        document.getElementById('summaryQuarter').style.display = 'block';
+        total += quarterTotal;
+      } else {
+        document.getElementById('summaryQuarter').style.display = 'none';
+      }
+
+      // Update half summary
+      if (quantities.half > 0) {
+        const halfTotal = quantities.half * prices.half;
+        document.getElementById('halfSummary').innerText = `${quantities.half} × ₦${prices.half.toLocaleString()} = ₦${halfTotal.toLocaleString()}`;
+        document.getElementById('summaryHalf').style.display = 'block';
+        total += halfTotal;
+      } else {
+        document.getElementById('summaryHalf').style.display = 'none';
+      }
+
+      // Update full summary
+      if (quantities.full > 0) {
+        const fullTotal = quantities.full * prices.full;
+        document.getElementById('fullSummary').innerText = `${quantities.full} × ₦${prices.full.toLocaleString()} = ₦${fullTotal.toLocaleString()}`;
+        document.getElementById('summaryFull').style.display = 'block';
+        total += fullTotal;
+      } else {
+        document.getElementById('summaryFull').style.display = 'none';
+      }
+
+      // Update other amount
+      const otherVal = Number(document.getElementById('otherQty').value) || 0;
+      if (otherVal > 0) {
+        document.getElementById('otherSummary').innerText = `₦${otherVal.toLocaleString()}`;
+        document.getElementById('summaryOther').style.display = 'block';
+        total += otherVal;
+      } else {
+        document.getElementById('summaryOther').style.display = 'none';
+      }
+
+      document.getElementById('summaryTotal').innerText = '₦' + total.toLocaleString();
+    }
+
+    document.getElementById('otherQty').oninput = updateSummary;
+
+    function copyAccount() {
+      navigator.clipboard.writeText('1004890736');
+      alert('Account number copied!');
+    }
+
+    function closeModal() {
+      document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    async function confirmBooking() {
+      const name = document.getElementById('bookingName').value;
+      const otherVal = Number(document.getElementById('otherQty').value) || 0;
+
+      const hasSlots = quantities.quarter > 0 || quantities.half > 0 || quantities.full > 0;
+      if (!name || (!hasSlots && otherVal <= 0)) {
+        alert('Please enter a name and select at least one slot type or enter a custom amount');
+        return;
+      }
+
+      // Calculate total
+      let total = otherVal;
+      total += quantities.quarter * prices.quarter;
+      total += quantities.half * prices.half;
+      total += quantities.full * prices.full;
+
+      // Show modal
+      document.getElementById('modalTotal').innerText = '₦' + total.toLocaleString();
+      document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    async function processFinalBooking() {
+      const name = document.getElementById('bookingName').value;
+      const email = document.getElementById('bookingEmail').value;
+      const otherVal = Number(document.getElementById('otherQty').value) || 0;
+
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email address');
+        return;
+      }
+
+      let total = otherVal;
+      total += quantities.quarter * prices.quarter;
+      total += quantities.half * prices.half;
+      total += quantities.full * prices.full;
+
+      const btn = document.querySelector('.paid-btn');
+      const mainBtn = document.querySelector('.confirm-btn');
+      const msg = document.getElementById('booking-confermation');
+
+      // Check if bookings are still open before opening Paystack
+      btn.disabled = true;
+      btn.innerText = 'Checking availability...';
+
+      fetch('/api/admin/booking-status', {
+        headers: { 'x-admin-secret': 'default-admin-secret' } // This is public in this app's current setup
+      })
+      .then(res => res.json())
+      .then(status => {
+        if (status.ram_open === false) {
+          alert('Sorry, Ram bookings have just been closed. Please contact support.');
+          btn.disabled = false;
+          btn.innerText = '💳 Pay Now';
+          closeModal();
+          return;
+        }
+        
+        let handler = PaystackPop.setup({
+          key: 'pk_test_5c659e332464ddc61e063f087b702079f72cfdf0',
+          email: email,
+          amount: total * 100,
+          currency: 'NGN',
+          callback: function (response) {
+            btn.disabled = true;
+            btn.innerText = 'Saving Booking...';
+
+            const bookingData = {
+              userId: user.id,
+              name: name,
+              email: email,
+              animalType: 'ram',
+              quarter: quantities.quarter,
+              half: quantities.half,
+              full: quantities.full,
+              total: total,
+              payment_reference: response.reference
+            };
+
+            fetch('/api/book', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(bookingData)
+            })
+            .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+            .then(function (result) {
+              if (result.ok) {
+                closeModal();
+                msg.innerText = 'Payment Successful! Booking Confirmed.';
+                msg.className = 'success';
+                mainBtn.disabled = true;
+                mainBtn.innerText = '✓ Payment Confirmed';
+                mainBtn.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
+
+                var bookingConfirmation = {
+                  name: name,
+                  animal_type: 'ram',
+                  quarter_qty: quantities.quarter,
+                  half_qty: quantities.half,
+                  full_qty: quantities.full,
+                  total: total,
+                  payment_status: 'paid'
+                };
+                sessionStorage.setItem('lastBooking', JSON.stringify(bookingConfirmation));
+
+                setTimeout(function () {
+                  window.location.href = 'confirmation.html';
+                }, 1500);
+              } else {
+                alert(result.data.message || 'Booking failed to save. Reference: ' + response.reference);
+                btn.disabled = false;
+                btn.innerText = '💳 Pay Now';
+              }
+            })
+            .catch(function (err) {
+              alert('Server error after payment. Please contact support.');
+              btn.disabled = false;
+              btn.innerText = '💳 Pay Now';
+            });
+          },
+          onClose: function () {
+            btn.disabled = false;
+            btn.innerText = '💳 Pay Now';
+            alert('Transaction was not completed.');
+          }
+        });
+        handler.openIframe();
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Could not verify booking status. Please try again.');
+        btn.disabled = false;
+        btn.innerText = '💳 Pay Now';
+      });
+    }
+  </script>
 </body>
+
 </html>

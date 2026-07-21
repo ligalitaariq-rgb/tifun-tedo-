@@ -58,7 +58,7 @@ body {
   width: 360px;
   max-width: 90%;
   padding: 28px 25px;
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,0,0.15);
   backdrop-filter: blur(4px);
   margin: 30px auto;
@@ -200,9 +200,85 @@ input[type="text"]:focus, input[type="number"]:focus {
   transition: all 0.3s ease;
 }
 .back-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-5px); }
+
+/* ===================== PAYMENT MODAL ===================== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.payment-modal {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  padding: 30px;
+  color: #333;
+  position: relative;
+  animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes modalSlideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.payment-modal h2 { color: #2d2d00; margin-bottom: 15px; text-align: center; }
+.bank-details {
+  background: #ffffee;
+  border: 1px dashed #5c5c00;
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+}
+.bank-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+.bank-row span:first-child { color: #666; font-weight: 500; }
+.bank-row span:last-child { color: #2d2d00; font-weight: 700; }
+.copy-btn {
+  background: none;
+  border: none;
+  color: #5c5c00;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+.modal-total {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #5c5c00;
+  margin: 15px 0;
+}
+.modal-btns { display: flex; flex-direction: column; gap: 10px; }
+.paid-btn {
+  background: linear-gradient(135deg, #2e7d32, #43a047);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.cancel-modal {
+  background: #f0f0f0;
+  color: #666;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
 </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6337324788887299"
      crossorigin="anonymous"></script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
 <body>
 
@@ -225,6 +301,9 @@ input[type="text"]:focus, input[type="number"]:focus {
 
   <label>Reservation Name</label>
   <input type="text" id="bookingName" placeholder="Enter name for reservation" required />
+
+  <label>Email Address</label>
+  <input type="email" id="bookingEmail" placeholder="Enter your email for payment receipt" required style="width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid #ddd; font-size: 0.95rem; margin-bottom: 15px;" />
 
   <label>Select Slot Types & Quantities</label>
   <div class="slots">
@@ -275,6 +354,42 @@ input[type="text"]:focus, input[type="number"]:focus {
   <div id="booking-confermation"></div>
   <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: #666;">
     Need help? <a href="tel:08058462020" style="color: #5c5c00; text-decoration: none; font-weight: 600;">Call Customer Care: 08058462020</a>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="modal-overlay">
+  <div class="payment-modal">
+    <h2>Complete Payment</h2>
+    <p style="text-align: center; font-size: 0.9rem; color: #666;">Pay securely to confirm your reservation.</p>
+    
+    <div class="modal-total" id="modalTotal">₦0</div>
+
+    <div class="modal-btns">
+      <button class="paid-btn" onclick="processFinalBooking()">💳 Pay Now</button>
+      <button class="cancel-modal" onclick="closeModal()">Cancel</button>
+    </div>
+
+    <p style="text-align: center; font-size: 0.75rem; color: #999; margin-top: 15px;">Powered by Paystack — Card, Bank Transfer & USSD accepted.</p>
+
+    <details style="margin-top: 15px; cursor: pointer;">
+      <summary style="font-size: 0.82rem; color: #888; text-align: center;">Or pay via direct bank transfer</summary>
+      <div class="bank-details" style="margin-top: 10px;">
+        <div class="bank-row">
+          <span>Bank:</span>
+          <span>Lotus Bank</span>
+        </div>
+        <div class="bank-row">
+          <span>Account Name:</span>
+          <span>Ligali Deji Jamiu</span>
+        </div>
+        <div class="bank-row">
+          <span>Account Number:</span>
+          <span>1004890736 <button class="copy-btn" onclick="copyAccount()">Copy</button></span>
+        </div>
+      </div>
+      <p style="font-size: 0.75rem; color: #aaa; text-align: center; margin-top: 8px;">If you transfer directly, contact us for manual verification.</p>
+    </details>
   </div>
 </div>
 
@@ -363,11 +478,19 @@ function updateSummary() {
 
 document.getElementById('otherQty').oninput = updateSummary;
 
+function copyAccount() {
+  navigator.clipboard.writeText('1004890736');
+  alert('Account number copied!');
+}
+
+function closeModal() {
+  document.getElementById('paymentModal').style.display = 'none';
+}
+
 async function confirmBooking() {
   const name = document.getElementById('bookingName').value;
   const otherVal = Number(document.getElementById('otherQty').value) || 0;
   
-  // Check if at least one slot type is selected or other amount is entered
   const hasSlots = quantities.quarter > 0 || quantities.half > 0 || quantities.full > 0;
   if (!name || (!hasSlots && otherVal <= 0)) {
     alert('Please enter a name and select at least one slot type or enter a custom amount');
@@ -380,62 +503,123 @@ async function confirmBooking() {
   total += quantities.half * prices.half;
   total += quantities.full * prices.full;
 
-  const bookingData = {
-    userId: user.id,
-    name: name,
-    animalType: 'goat',
-    quarter: quantities.quarter,
-    half: quantities.half,
-    full: quantities.full,
-    total: total
-  };
+  // Show modal
+  document.getElementById('modalTotal').innerText = '₦' + total.toLocaleString();
+  document.getElementById('paymentModal').style.display = 'flex';
+}
 
-  const btn = document.querySelector('.confirm-btn');
+async function processFinalBooking() {
+  const name = document.getElementById('bookingName').value;
+  const email = document.getElementById('bookingEmail').value;
+  const otherVal = Number(document.getElementById('otherQty').value) || 0;
+  
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+
+  let total = otherVal;
+  total += quantities.quarter * prices.quarter;
+  total += quantities.half * prices.half;
+  total += quantities.full * prices.full;
+
+  const btn = document.querySelector('.paid-btn');
+  const mainBtn = document.querySelector('.confirm-btn');
   const msg = document.getElementById('booking-confermation');
   
+  // Check if bookings are still open before opening Paystack
   btn.disabled = true;
-  btn.innerText = 'Processing...';
+  btn.innerText = 'Checking availability...';
 
-  try {
-    const res = await fetch('/api/book', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bookingData)
-    });
-    const data = await res.json();
-    
-    if (res.ok) {
-      msg.innerText = data.message + ' (Total: ₦' + total.toLocaleString() + ')';
-      msg.className = 'success';
-      btn.innerText = '✓ Reservation Confirmed';
-      btn.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
-      
-      // Store booking data and redirect to confirmation page
-      const bookingConfirmation = {
-        name: name,
-        animal_type: 'goat',
-        quarter_qty: quantities.quarter,
-        half_qty: quantities.half,
-        full_qty: quantities.full,
-        total: total
-      };
-      sessionStorage.setItem('lastBooking', JSON.stringify(bookingConfirmation));
-      
-      setTimeout(() => {
-        window.location.href = 'confirmation.html';
-      }, 1000);
-    } else {
-      msg.innerText = data.message || 'Booking failed';
-      msg.className = 'error';
+  fetch('/api/admin/booking-status', {
+    headers: { 'x-admin-secret': 'default-admin-secret' }
+  })
+  .then(res => res.json())
+  .then(status => {
+    if (status.goat_open === false) {
+      alert('Sorry, Goat bookings have just been closed. Please contact support.');
       btn.disabled = false;
-      btn.innerText = 'Confirm Reservation';
+      btn.innerText = '💳 Pay Now';
+      closeModal();
+      return;
     }
-  } catch (err) {
-    msg.innerText = 'Failed to connect to server';
-    msg.className = 'error';
+    
+    let handler = PaystackPop.setup({
+      key: 'pk_test_5c659e332464ddc61e063f087b702079f72cfdf0',
+      email: email,
+      amount: total * 100,
+      currency: 'NGN',
+      callback: function(response) {
+        btn.disabled = true;
+        btn.innerText = 'Saving Booking...';
+        
+        const bookingData = {
+          userId: user.id,
+          name: name,
+          email: email,
+          animalType: 'goat',
+          quarter: quantities.quarter,
+          half: quantities.half,
+          full: quantities.full,
+          total: total,
+          payment_reference: response.reference
+        };
+
+        fetch('/api/book', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bookingData)
+        })
+        .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+        .then(function(result) {
+          if (result.ok) {
+            closeModal();
+            msg.innerText = 'Payment Successful! Booking Confirmed.';
+            msg.className = 'success';
+            mainBtn.disabled = true;
+            mainBtn.innerText = '✓ Payment Confirmed';
+            mainBtn.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
+            
+            var bookingConfirmation = {
+              name: name,
+              animal_type: 'goat',
+              quarter_qty: quantities.quarter,
+              half_qty: quantities.half,
+              full_qty: quantities.full,
+              total: total,
+              payment_status: 'paid'
+            };
+            sessionStorage.setItem('lastBooking', JSON.stringify(bookingConfirmation));
+            
+            setTimeout(function() {
+              window.location.href = 'confirmation.html';
+            }, 1500);
+          } else {
+            alert(result.data.message || 'Booking failed to save. Reference: ' + response.reference);
+            btn.disabled = false;
+            btn.innerText = '💳 Pay Now';
+          }
+        })
+        .catch(function(err) {
+          alert('Server error after payment. Please contact support.');
+          btn.disabled = false;
+          btn.innerText = '💳 Pay Now';
+        });
+      },
+      onClose: function() {
+        btn.disabled = false;
+        btn.innerText = '💳 Pay Now';
+        alert('Transaction was not completed.');
+      }
+    });
+    handler.openIframe();
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Could not verify booking status.');
     btn.disabled = false;
-    btn.innerText = 'Confirm Reservation';
-  }
+    btn.innerText = '💳 Pay Now';
+  });
 }
 </script>
 </body>

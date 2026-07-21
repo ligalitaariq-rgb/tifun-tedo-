@@ -88,7 +88,7 @@ body {
 
 h1 {
   text-align: center;
-  color: #2e7d32;
+  color: #b45309;
   margin-bottom: 10px;
   font-size: 1.8rem;
 }
@@ -197,6 +197,38 @@ h1 {
   background: rgba(255,255,255,0.3);
   transform: translateX(-5px);
 }
+
+.payment-reminder {
+  background: #fff8e1;
+  border: 1px dashed #f59e0b;
+  border-radius: 15px;
+  padding: 18px;
+  margin: 20px 0;
+}
+.payment-reminder p {
+  font-size: 0.9rem;
+  color: #78350f;
+  line-height: 1.7;
+}
+.payment-reminder strong {
+  font-size: 0.95rem;
+  color: #92400e;
+  display: block;
+  margin-bottom: 8px;
+}
+.pending-badge {
+  display: inline-block;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  border-radius: 999px;
+  padding: 5px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
 </style>
 </head>
 <body>
@@ -213,10 +245,23 @@ h1 {
 </div>
 
 <div class="card">
-  <div class="success-icon">✅</div>
+  <div class="success-icon" id="statusIcon">⏳</div>
   
-  <h1>Booking Confirmed!</h1>
-  <p class="subtitle">Your reservation has been successfully saved</p>
+  <div style="text-align:center;">
+    <div class="pending-badge" id="statusBadge">⏳ Awaiting Payment Verification</div>
+  </div>
+
+  <h1 id="pageTitle">Payment Pending</h1>
+  <p class="subtitle" id="pageSubtitle">Please make your transfer to complete your reservation</p>
+
+  <div class="payment-reminder" id="paymentReminder">
+    <strong>📌 Payment Instructions</strong>
+    <p>Transfer your total amount to:</p>
+    <p><strong>Bank:</strong> Lotus Bank</p>
+    <p><strong>Account Name:</strong> Ligali Deji Jamiu</p>
+    <p><strong>Account Number:</strong> 1004890736</p>
+    <p style="margin-top:10px; font-style: italic;">Once we confirm your payment, your reservation will be fully activated.</p>
+  </div>
 
   <div class="booking-details">
     <strong>Booking Details</strong>
@@ -285,6 +330,20 @@ if (!booking) {
 document.getElementById('detailName').innerText = booking.name;
 document.getElementById('detailAnimal').innerText = booking.animal_type.charAt(0).toUpperCase() + booking.animal_type.slice(1);
 document.getElementById('detailTotal').innerText = '₦' + (booking.total || 0).toLocaleString();
+
+// Handle Paid vs Pending status
+if (booking.payment_status === 'paid') {
+  document.getElementById('statusIcon').innerText = '✅';
+  document.getElementById('statusBadge').innerText = '✅ Payment Confirmed';
+  document.getElementById('statusBadge').style.background = '#dcfce7';
+  document.getElementById('statusBadge').style.color = '#166534';
+  document.getElementById('statusBadge').style.borderColor = '#86efac';
+  
+  document.getElementById('pageTitle').innerText = 'Booking Confirmed!';
+  document.getElementById('pageTitle').style.color = '#2e7d32';
+  document.getElementById('pageSubtitle').innerText = 'Thank you for your payment. Your reservation is secured.';
+  document.getElementById('paymentReminder').style.display = 'none';
+}
 
 const prices = { quarter: 3250, half: 6500, full: 13000 };
 

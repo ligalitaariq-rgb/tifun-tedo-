@@ -19,6 +19,9 @@ CREATE TABLE bookings (
   half_qty INTEGER DEFAULT 0,
   full_qty INTEGER DEFAULT 0,
   total NUMERIC NOT NULL,
+  email TEXT NOT NULL,
+  payment_status TEXT DEFAULT 'pending',
+  payment_proof TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

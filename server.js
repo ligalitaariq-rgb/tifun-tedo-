@@ -193,15 +193,34 @@ app.post("/api/admin/booking-toggle", async (req, res) => {
   }
 });
 
+app.post("/api/admin/confirm-payment/:id", async (req, res) => {
+  try {
+    if (!isAdminRequest(req)) return res.status(403).json({ message: "Admin credentials required" });
+
+    const { id } = req.params;
+    const { data, error } = await supabase
+      .from("bookings")
+      .update({ payment_status: 'paid' })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) return res.status(500).json({ message: "Failed to update payment status", error: error.message });
+    res.json({ message: "Payment confirmed", booking: data });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // =====================
 // BOOKING ROUTES
 // =====================
 app.post("/api/book", async (req, res) => {
   try {
-    const { userId, name, animalType, quarter = 0, half = 0, full = 0, total } = req.body;
+    const { userId, name, email, animalType, quarter = 0, half = 0, full = 0, total } = req.body;
 
-    if (!userId || !name || total <= 0) {
-      return res.status(400).json({ message: "Invalid booking data" });
+    if (!userId || !name || !email || total <= 0) {
+      return res.status(400).json({ message: "Invalid booking data (Name and Email are required)" });
     }
 
     const controlState = await getBookingControlState();
@@ -227,11 +246,13 @@ app.post("/api/book", async (req, res) => {
         {
           user_id: dbUserId,
           name,
+          email,
           animal_type: animalType || 'cow',
           quarter_qty: quarter,
           half_qty: half,
           full_qty: full,
           total,
+          payment_status: 'pending',
           created_at: new Date().toISOString()
         }
       ])
@@ -281,11 +302,9 @@ app.get("/", (req, res) => {
 // =====================
 // START SERVER
 // =====================
-const PORT = process.env.PORT || 3000;
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-  });
-}
+const PORT = process.env.PORT || 3003;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
 
 module.exports = app;

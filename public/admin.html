@@ -9,7 +9,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a0a00 0%, #3b1200 40%, #5c2000 70%, #2d0d00 100%);
+      background: linear-gradient(135deg, rgb(26, 10, 0) 0%, rgb(59, 18, 0) 40%, rgb(92, 32, 0) 70%, #2d0d00 100%);
       min-height: 100vh;
       color: white;
       padding: 25px;
@@ -132,6 +132,40 @@
       opacity: 0.85;
       color: #f4f1ea;
     }
+    .badge-pending {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(251,191,36,0.2);
+      color: #fbbf24;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-paid {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(134,255,152,0.2);
+      color: #86ff98;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .confirm-pay-btn {
+      background: rgba(134,255,152,0.15);
+      color: #86ff98;
+      border: 1px solid rgba(134,255,152,0.3);
+      padding: 5px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .confirm-pay-btn:hover { background: rgba(134,255,152,0.3); }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6337324788887299"
      crossorigin="anonymous"></script>
@@ -184,10 +218,13 @@
         <tr>
           <th>Date</th>
           <th>User</th>
+          <th>Email</th>
           <th>Animal</th>
           <th>Name</th>
           <th>Q / H / F</th>
           <th>Total</th>
+          <th>Payment</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody id="bookingTableBody">
@@ -257,13 +294,24 @@
         data.forEach(booking => {
           const row = document.createElement('tr');
           const date = new Date(booking.created_at).toLocaleString();
+          const isPaid = booking.payment_status === 'paid';
+          const paymentBadge = isPaid
+            ? `<span class="badge-paid">✔ Paid</span>`
+            : `<span class="badge-pending">⏳ Pending</span>`;
+          const actionBtn = isPaid
+            ? `<span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">Verified</span>`
+            : `<button class="confirm-pay-btn" onclick="markPaid(${booking.id}, this)">✔ Confirm Payment</button>`;
+
           row.innerHTML = `
             <td>${date}</td>
             <td>${booking.user_id === 'admin' ? 'Admin' : booking.user_id}</td>
+            <td><a href="mailto:${booking.email}" style="color: #f0a060; text-decoration: none;">${booking.email}</a></td>
             <td>${booking.animal_type}</td>
             <td>${booking.name}</td>
             <td>${booking.quarter_qty} / ${booking.half_qty} / ${booking.full_qty}</td>
             <td><span class="amount">₦${Number(booking.total).toLocaleString()}</span></td>
+            <td>${paymentBadge}</td>
+            <td>${actionBtn}</td>
           `;
           bookingTableBody.appendChild(row);
         });
@@ -284,6 +332,25 @@
         await loadBookingStatus();
       } catch (error) {
         alert(error.message || 'Unable to update booking status');
+      }
+    }
+
+    async function markPaid(bookingId, btn) {
+      if (!confirm('Mark this booking as PAID? This action confirms payment received.')) return;
+      try {
+        btn.disabled = true;
+        btn.innerText = 'Updating...';
+        const res = await fetch(`/api/admin/confirm-payment/${bookingId}`, {
+          method: 'POST',
+          headers: adminHeaders
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed');
+        await loadBookings();
+      } catch (error) {
+        alert(error.message || 'Unable to confirm payment');
+        btn.disabled = false;
+        btn.innerText = '✔ Confirm Payment';
       }
     }
 
