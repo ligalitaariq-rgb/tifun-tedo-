@@ -511,6 +511,7 @@
         <p id="summaryHalf" style="display:none;"><span>Half:</span> <span id="halfSummary">0</span></p>
         <p id="summaryFull" style="display:none;"><span>Full:</span> <span id="fullSummary">0</span></p>
         <p id="summaryOther" style="display:none;"><span>Other:</span> <span id="otherSummary">₦0</span></p>
+        <p id="summaryServiceFee" style="display:none;"><span>Service Fee (0.77%):</span> <span id="feeSummary">₦0</span></p>
       </div>
       <p style="border-top: 1px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: bold; color: #002d2d;">
         <span>Total:</span> <span id="summaryTotal">₦0</span>
@@ -601,14 +602,14 @@
     }
 
     function updateSummary() {
-      let total = 0;
+      let subtotal = 0;
 
       // Update quarter summary
       if (quantities.quarter > 0) {
         const quarterTotal = quantities.quarter * prices.quarter;
         document.getElementById('quarterSummary').innerText = `${quantities.quarter} × ₦${prices.quarter.toLocaleString()} = ₦${quarterTotal.toLocaleString()}`;
         document.getElementById('summaryQuarter').style.display = 'block';
-        total += quarterTotal;
+        subtotal += quarterTotal;
       } else {
         document.getElementById('summaryQuarter').style.display = 'none';
       }
@@ -618,7 +619,7 @@
         const halfTotal = quantities.half * prices.half;
         document.getElementById('halfSummary').innerText = `${quantities.half} × ₦${prices.half.toLocaleString()} = ₦${halfTotal.toLocaleString()}`;
         document.getElementById('summaryHalf').style.display = 'block';
-        total += halfTotal;
+        subtotal += halfTotal;
       } else {
         document.getElementById('summaryHalf').style.display = 'none';
       }
@@ -628,7 +629,7 @@
         const fullTotal = quantities.full * prices.full;
         document.getElementById('fullSummary').innerText = `${quantities.full} × ₦${prices.full.toLocaleString()} = ₦${fullTotal.toLocaleString()}`;
         document.getElementById('summaryFull').style.display = 'block';
-        total += fullTotal;
+        subtotal += fullTotal;
       } else {
         document.getElementById('summaryFull').style.display = 'none';
       }
@@ -638,12 +639,21 @@
       if (otherVal > 0) {
         document.getElementById('otherSummary').innerText = `₦${otherVal.toLocaleString()}`;
         document.getElementById('summaryOther').style.display = 'block';
-        total += otherVal;
+        subtotal += otherVal;
       } else {
         document.getElementById('summaryOther').style.display = 'none';
       }
 
-      document.getElementById('summaryTotal').innerText = '₦' + total.toLocaleString();
+      if (subtotal > 0) {
+        const serviceFee = Math.round(subtotal * 0.0077);
+        const total = subtotal + serviceFee;
+        document.getElementById('feeSummary').innerText = '₦' + serviceFee.toLocaleString();
+        document.getElementById('summaryServiceFee').style.display = 'block';
+        document.getElementById('summaryTotal').innerText = '₦' + total.toLocaleString();
+      } else {
+        document.getElementById('summaryServiceFee').style.display = 'none';
+        document.getElementById('summaryTotal').innerText = '₦0';
+      }
     }
 
     document.getElementById('otherQty').oninput = updateSummary;
@@ -667,11 +677,13 @@
         return;
       }
 
-      // Calculate total
-      let total = otherVal;
-      total += quantities.quarter * prices.quarter;
-      total += quantities.half * prices.half;
-      total += quantities.full * prices.full;
+      // Calculate subtotal & 0.77% service fee
+      let subtotal = otherVal;
+      subtotal += quantities.quarter * prices.quarter;
+      subtotal += quantities.half * prices.half;
+      subtotal += quantities.full * prices.full;
+      const serviceFee = Math.round(subtotal * 0.0077);
+      const total = subtotal + serviceFee;
 
       // Show modal
       document.getElementById('modalTotal').innerText = '₦' + total.toLocaleString();
@@ -688,10 +700,12 @@
         return;
       }
 
-      let total = otherVal;
-      total += quantities.quarter * prices.quarter;
-      total += quantities.half * prices.half;
-      total += quantities.full * prices.full;
+      let subtotal = otherVal;
+      subtotal += quantities.quarter * prices.quarter;
+      subtotal += quantities.half * prices.half;
+      subtotal += quantities.full * prices.full;
+      const serviceFee = Math.round(subtotal * 0.0077);
+      const total = subtotal + serviceFee;
 
       const btn = document.querySelector('.paid-btn');
       const mainBtn = document.querySelector('.confirm-btn');
@@ -731,6 +745,8 @@
               quarter: quantities.quarter,
               half: quantities.half,
               full: quantities.full,
+              subtotal: subtotal,
+              service_fee: serviceFee,
               total: total,
               payment_reference: response.reference
             };
@@ -756,6 +772,8 @@
                   quarter_qty: quantities.quarter,
                   half_qty: quantities.half,
                   full_qty: quantities.full,
+                  subtotal: subtotal,
+                  service_fee: serviceFee,
                   total: total,
                   payment_status: 'paid'
                 };
