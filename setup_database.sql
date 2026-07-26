@@ -33,10 +33,13 @@ CREATE TABLE booking_controls (
   cow_open BOOLEAN NOT NULL DEFAULT TRUE,
   ram_open BOOLEAN NOT NULL DEFAULT TRUE,
   goat_open BOOLEAN NOT NULL DEFAULT TRUE,
+  cow_price NUMERIC NOT NULL DEFAULT 13000,
+  ram_price NUMERIC NOT NULL DEFAULT 25000,
+  goat_price NUMERIC NOT NULL DEFAULT 25000,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-INSERT INTO booking_controls (cow_open, ram_open, goat_open) VALUES (TRUE, TRUE, TRUE);
+INSERT INTO booking_controls (cow_open, ram_open, goat_open, cow_price, ram_price, goat_price) VALUES (TRUE, TRUE, TRUE, 13000, 25000, 25000);
 
 -- Re-enable security
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
