@@ -243,32 +243,47 @@ app.post("/api/book", async (req, res) => {
       }
     }
 
-    const { data, error } = await supabase
+    const insertPayload = {
+      user_id: dbUserId,
+      name,
+      email,
+      animal_type: animalType || 'cow',
+      quarter_qty: quarter,
+      half_qty: half,
+      full_qty: full,
+      subtotal: computedSubtotal,
+      service_fee: computedServiceFee,
+      total,
+      second_account_note: 'UBA - 2233156875',
+      payment_status: 'pending',
+      created_at: new Date().toISOString()
+    };
+
+    let { data, error } = await supabase
       .from("bookings")
-      .insert([
-        {
-          user_id: dbUserId,
-          name,
-          email,
-          animal_type: animalType || 'cow',
-          quarter_qty: quarter,
-          half_qty: half,
-          full_qty: full,
-          subtotal: computedSubtotal,
-          service_fee: computedServiceFee,
-          total,
-          second_account_note: 'UBA - 2233156875',
-          payment_status: 'pending',
-          created_at: new Date().toISOString()
-        }
-      ])
+      .insert([insertPayload])
       .select();
+
+    // If Supabase table doesn't have the new fee columns yet, fallback to core fields so booking always succeeds
+    if (error && (error.code === 'PGRST204' || (error.message && error.message.toLowerCase().includes('column')))) {
+      console.warn("Supabase missing fee columns, falling back to core schema:", error.message);
+      delete insertPayload.subtotal;
+      delete insertPayload.service_fee;
+      delete insertPayload.second_account_note;
+
+      const fallbackRes = await supabase
+        .from("bookings")
+        .insert([insertPayload])
+        .select();
+      data = fallbackRes.data;
+      error = fallbackRes.error;
+    }
 
     if (error) {
       if (error.code === '23503') {
         return res.status(400).json({ message: "User account not found. Please log out and sign up again." });
       }
-      return res.status(500).json({ message: "Failed to save booking", error: error.message });
+      return res.status(500).json({ message: "Failed to save booking: " + error.message, error: error.message });
     }
 
     res.status(201).json({ message: "Booking saved successfully", booking: data[0] });
