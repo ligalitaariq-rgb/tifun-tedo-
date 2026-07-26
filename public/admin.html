@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="Screenshot 2025-12-28 085733.jpg">
-  <title>Admin Dashboard</title>
+  <title>Tifun-Tedo - Admin Portal</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -20,10 +20,10 @@
       justify-content: space-between;
       gap: 15px;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
     .topbar h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       background: linear-gradient(to right, #f0a060, #d46a3a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -48,46 +48,179 @@
     }
     .topbar button:hover,
     .topbar a:hover { transform: translateY(-2px); background: rgba(255,255,255,0.2); }
-    .status-panel {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
+
+    /* ===================== ANIMAL TAB SELECTION ===================== */
+    .nav-tabs {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
     }
-    .card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 24px;
-      padding: 25px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-      min-height: 120px;
-    }
-    .card h2 {
+    .tab-btn {
+      flex: 1;
+      min-width: 160px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 18px 20px;
+      color: #fff;
       font-size: 1.1rem;
-      margin-bottom: 12px;
-      color: #f0a060;
-    }
-    .card p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #f4f1ea;
-    }
-    .card .value {
-      margin-top: 16px;
-      font-size: 2rem;
       font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    .tab-btn:hover {
+      background: rgba(212, 106, 58, 0.2);
+      border-color: #d46a3a;
+      transform: translateY(-3px);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #c24d2c, #e37a3f);
+      border-color: #f0a060;
+      box-shadow: 0 10px 25px rgba(194, 77, 44, 0.4);
       color: #fff;
     }
-    .card .badge {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(240,160,96,0.16);
+
+    /* ===================== CONTROL CARD & PRICE EDITOR ===================== */
+    .dashboard-panel {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .dashboard-panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animal-control-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 15px;
+    }
+    .card-header h2 {
+      font-size: 1.6rem;
       color: #f0a060;
-      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-badge {
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    .status-badge.open { background: rgba(134,255,152,0.2); color: #86ff98; border: 1px solid rgba(134,255,152,0.4); }
+    .status-badge.closed { background: rgba(255,142,142,0.2); color: #ff8e8e; border: 1px solid rgba(255,142,142,0.4); }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* Open/Close Toggle Box */
+    .toggle-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .toggle-box h3 { font-size: 1rem; color: #ddd; margin-bottom: 10px; }
+    .toggle-btns { display: flex; gap: 12px; margin-top: 12px; }
+    .toggle-btns button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-open { background: rgba(134,255,152,0.25); color: #86ff98; border: 1px solid rgba(134,255,152,0.4); }
+    .btn-open:hover { background: rgba(134,255,152,0.4); }
+    .btn-close { background: rgba(255,142,142,0.25); color: #ff8e8e; border: 1px solid rgba(255,142,142,0.4); }
+    .btn-close:hover { background: rgba(255,142,142,0.4); }
+
+    /* Price Management Box */
+    .price-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .price-box h3 { font-size: 1rem; color: #ddd; margin-bottom: 12px; }
+    .price-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .price-input-group input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.9);
+      color: #333;
+      font-size: 1.05rem;
+      font-weight: bold;
+      outline: none;
+    }
+    .price-input-group input:focus { border-color: #f0a060; }
+    .price-input-group button {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #c24d2c, #e37a3f);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .price-input-group button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .calculated-prices {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .calc-item { font-size: 0.8rem; color: #aaa; }
+    .calc-item strong { display: block; font-size: 0.95rem; color: #f0a060; margin-top: 4px; }
+
+    /* ===================== TABLE ===================== */
+    .table-section-title {
+      font-size: 1.3rem;
+      color: #f0a060;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .table-wrapper {
       overflow-x: auto;
@@ -116,16 +249,7 @@
     tr:not(:first-child) td {
       border-top: 1px solid rgba(255,255,255,0.08);
     }
-    td span.amount {
-      font-weight: 700;
-      color: #fff;
-    }
-    .state-open {
-      color: #86ff98;
-    }
-    .state-paused {
-      color: #ff8e8e;
-    }
+    td span.amount { font-weight: 700; color: #fff; }
     .empty-state {
       text-align: center;
       padding: 40px;
@@ -141,7 +265,6 @@
       font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
     .badge-paid {
       display: inline-block;
@@ -152,13 +275,12 @@
       font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
     .confirm-pay-btn {
       background: rgba(134,255,152,0.15);
       color: #86ff98;
       border: 1px solid rgba(134,255,152,0.3);
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 0.78rem;
@@ -167,51 +289,127 @@
     }
     .confirm-pay-btn:hover { background: rgba(134,255,152,0.3); }
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6337324788887299"
-     crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="topbar">
     <div>
-      <h1>Admin Dashboard</h1>
-      <p style="color: rgba(255,255,255,0.75); margin-top: 6px;">Manage bookings and pause reservations for one week.</p>
+      <h1>Tifun-Tedo Admin Portal</h1>
+      <p style="color: rgba(255,255,255,0.75); margin-top: 6px;">Manage booking availability, prices, and customer orders.</p>
     </div>
     <div class="actions">
-      <a href="selection.html">Back to App</a>
+      <a href="selection.html">← Back to App</a>
       <button onclick="logout()">Logout</button>
     </div>
   </div>
 
-  <div class="status-panel">
-    <div class="card" id="card-cow">
-      <h2>Cow Booking</h2>
-      <p>Current status for Cow reservations.</p>
-      <div class="value" id="status-cow">Loading...</div>
-      <div style="margin-top: 15px; display: flex; gap: 10px;">
-        <button class="action-btn" onclick="toggleAnimal('cow', 'open')" style="background: rgba(134,255,152,0.2); color: #86ff98; border: 1px solid rgba(134,255,152,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold;">Open</button>
-        <button class="action-btn" onclick="toggleAnimal('cow', 'close')" style="background: rgba(255,142,142,0.2); color: #ff8e8e; border: 1px solid rgba(255,142,142,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold;">Close</button>
+  <!-- ANIMAL DASHBOARD TABS -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" id="tab-cow" onclick="switchAnimalTab('cow')">🐄 Cow Dashboard</button>
+    <button class="tab-btn" id="tab-goat" onclick="switchAnimalTab('goat')">🐐 Goat Dashboard</button>
+    <button class="tab-btn" id="tab-ram" onclick="switchAnimalTab('ram')">🐏 Ram Dashboard</button>
+    <button class="tab-btn" id="tab-all" onclick="switchAnimalTab('all')">📋 All Bookings</button>
+  </div>
+
+  <!-- COW PANEL -->
+  <div class="dashboard-panel active" id="panel-cow">
+    <div class="animal-control-card">
+      <div class="card-header">
+        <h2>🐄 Cow Management Panel</h2>
+        <span class="status-badge open" id="badge-cow">Loading...</span>
       </div>
-    </div>
-    <div class="card" id="card-ram">
-      <h2>Ram Booking</h2>
-      <p>Current status for Ram reservations.</p>
-      <div class="value" id="status-ram">Loading...</div>
-      <div style="margin-top: 15px; display: flex; gap: 10px;">
-        <button class="action-btn" onclick="toggleAnimal('ram', 'open')" style="background: rgba(134,255,152,0.2); color: #86ff98; border: 1px solid rgba(134,255,152,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold;">Open</button>
-        <button class="action-btn" onclick="toggleAnimal('ram', 'close')" style="background: rgba(255,142,142,0.2); color: #ff8e8e; border: 1px solid rgba(255,142,142,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold;">Close</button>
-      </div>
-    </div>
-    <div class="card" id="card-goat">
-      <h2>Goat Booking</h2>
-      <p>Current status for Goat reservations.</p>
-      <div class="value" id="status-goat">Loading...</div>
-      <div style="margin-top: 15px; display: flex; gap: 10px;">
-        <button class="action-btn" onclick="toggleAnimal('goat', 'open')" style="background: rgba(134,255,152,0.2); color: #86ff98; border: 1px solid rgba(134,255,152,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold;">Open</button>
-        <button class="action-btn" onclick="toggleAnimal('goat', 'close')" style="background: rgba(255,142,142,0.2); color: #ff8e8e; border: 1px solid rgba(255,142,142,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold;">Close</button>
+      <div class="control-grid">
+        <div class="toggle-box">
+          <h3>Booking Status</h3>
+          <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 8px;">Open or close reservations for cows.</p>
+          <div class="toggle-btns">
+            <button class="btn-open" onclick="toggleAnimal('cow', 'open')">✓ Open Bookings</button>
+            <button class="btn-close" onclick="toggleAnimal('cow', 'close')">✕ Close Bookings</button>
+          </div>
+        </div>
+        <div class="price-box">
+          <h3>Set Full Cow Price (₦)</h3>
+          <div class="price-input-group">
+            <input type="number" id="price-input-cow" placeholder="e.g. 13000" oninput="previewPrices('cow')" />
+            <button onclick="saveAnimalPrice('cow')">Save Price</button>
+          </div>
+          <div class="calculated-prices">
+            <div class="calc-item">Full Slot<strong id="calc-cow-full">₦0</strong></div>
+            <div class="calc-item">Half Slot (50%)<strong id="calc-cow-half">₦0</strong></div>
+            <div class="calc-item">Quarter (25%)<strong id="calc-cow-quarter">₦0</strong></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- GOAT PANEL -->
+  <div class="dashboard-panel" id="panel-goat">
+    <div class="animal-control-card">
+      <div class="card-header">
+        <h2>🐐 Goat Management Panel</h2>
+        <span class="status-badge open" id="badge-goat">Loading...</span>
+      </div>
+      <div class="control-grid">
+        <div class="toggle-box">
+          <h3>Booking Status</h3>
+          <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 8px;">Open or close reservations for goats.</p>
+          <div class="toggle-btns">
+            <button class="btn-open" onclick="toggleAnimal('goat', 'open')">✓ Open Bookings</button>
+            <button class="btn-close" onclick="toggleAnimal('goat', 'close')">✕ Close Bookings</button>
+          </div>
+        </div>
+        <div class="price-box">
+          <h3>Set Full Goat Price (₦)</h3>
+          <div class="price-input-group">
+            <input type="number" id="price-input-goat" placeholder="e.g. 25000" oninput="previewPrices('goat')" />
+            <button onclick="saveAnimalPrice('goat')">Save Price</button>
+          </div>
+          <div class="calculated-prices">
+            <div class="calc-item">Full Slot<strong id="calc-goat-full">₦0</strong></div>
+            <div class="calc-item">Half Slot (50%)<strong id="calc-goat-half">₦0</strong></div>
+            <div class="calc-item">Quarter (25%)<strong id="calc-goat-quarter">₦0</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAM PANEL -->
+  <div class="dashboard-panel" id="panel-ram">
+    <div class="animal-control-card">
+      <div class="card-header">
+        <h2>🐏 Ram Management Panel</h2>
+        <span class="status-badge open" id="badge-ram">Loading...</span>
+      </div>
+      <div class="control-grid">
+        <div class="toggle-box">
+          <h3>Booking Status</h3>
+          <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 8px;">Open or close reservations for rams.</p>
+          <div class="toggle-btns">
+            <button class="btn-open" onclick="toggleAnimal('ram', 'open')">✓ Open Bookings</button>
+            <button class="btn-close" onclick="toggleAnimal('ram', 'close')">✕ Close Bookings</button>
+          </div>
+        </div>
+        <div class="price-box">
+          <h3>Set Full Ram Price (₦)</h3>
+          <div class="price-input-group">
+            <input type="number" id="price-input-ram" placeholder="e.g. 25000" oninput="previewPrices('ram')" />
+            <button onclick="saveAnimalPrice('ram')">Save Price</button>
+          </div>
+          <div class="calculated-prices">
+            <div class="calc-item">Full Slot<strong id="calc-ram-full">₦0</strong></div>
+            <div class="calc-item">Half Slot (50%)<strong id="calc-ram-half">₦0</strong></div>
+            <div class="calc-item">Quarter (25%)<strong id="calc-ram-quarter">₦0</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING HISTORY TABLE -->
+  <div class="table-section-title">
+    <span id="historyTitle">📋 Booking History (Cow)</span>
+  </div>
   <div class="table-wrapper">
     <table>
       <thead>
@@ -222,6 +420,8 @@
           <th>Animal</th>
           <th>Name</th>
           <th>Q / H / F</th>
+          <th>Subtotal</th>
+          <th>Fee (0.77%)</th>
           <th>Total</th>
           <th>Payment</th>
           <th>Action</th>
@@ -231,11 +431,19 @@
       </tbody>
     </table>
     <div id="emptyState" class="empty-state" style="display:none;">
-      No bookings available yet.
+      No bookings available for this category yet.
     </div>
   </div>
 
   <script>
+    let activeAnimal = 'cow';
+    let allBookingsData = [];
+    let pricingData = {
+      cow: { full: 13000 },
+      goat: { full: 25000 },
+      ram: { full: 25000 }
+    };
+
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.isAdmin || !user.adminSecret) {
       window.location.href = 'index.html';
@@ -246,31 +454,105 @@
       'x-admin-secret': user.adminSecret
     };
 
-    const bookingTableBody = document.getElementById('bookingTableBody');
-    const emptyState = document.getElementById('emptyState');
+    function switchAnimalTab(animal) {
+      activeAnimal = animal;
 
-    function updateAnimalUI(animal, isOpen) {
-      const el = document.getElementById(`status-${animal}`);
-      if (isOpen) {
-        el.innerText = 'Open';
-        el.className = 'value state-open';
+      // Update tabs UI
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`tab-${animal}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Update panels UI
+      document.querySelectorAll('.dashboard-panel').forEach(panel => panel.classList.remove('active'));
+      const activePanel = document.getElementById(`panel-${animal}`);
+      if (activePanel) activePanel.classList.add('active');
+
+      // Update table title
+      const titleEl = document.getElementById('historyTitle');
+      if (animal === 'all') {
+        titleEl.innerText = '📋 All Booking History';
       } else {
-        el.innerText = 'Closed';
-        el.className = 'value state-paused';
+        const animalName = animal.charAt(0).toUpperCase() + animal.slice(1);
+        titleEl.innerText = `📋 Booking History (${animalName})`;
+      }
+
+      renderBookings();
+    }
+
+    function previewPrices(animal) {
+      const val = Number(document.getElementById(`price-input-${animal}`).value) || 0;
+      const half = Math.round(val / 2);
+      const quarter = Math.round(val / 4);
+
+      document.getElementById(`calc-${animal}-full`).innerText = '₦' + val.toLocaleString();
+      document.getElementById(`calc-${animal}-half`).innerText = '₦' + half.toLocaleString();
+      document.getElementById(`calc-${animal}-quarter`).innerText = '₦' + quarter.toLocaleString();
+    }
+
+    async function loadPrices() {
+      try {
+        const res = await fetch('/api/prices');
+        const data = await res.json();
+        if (data.cow) pricingData.cow = data.cow;
+        if (data.goat) pricingData.goat = data.goat;
+        if (data.ram) pricingData.ram = data.ram;
+
+        ['cow', 'goat', 'ram'].forEach(animal => {
+          if (pricingData[animal] && pricingData[animal].full) {
+            document.getElementById(`price-input-${animal}`).value = pricingData[animal].full;
+            previewPrices(animal);
+          }
+        });
+      } catch (err) {
+        console.error("Failed to load prices", err);
+      }
+    }
+
+    async function saveAnimalPrice(animal) {
+      const inputEl = document.getElementById(`price-input-${animal}`);
+      const val = Number(inputEl.value);
+      if (!val || val <= 0) {
+        alert('Please enter a valid price for full slot');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/price-update', {
+          method: 'POST',
+          headers: adminHeaders,
+          body: JSON.stringify({ animalType: animal, fullPrice: val })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to save price');
+
+        alert(data.message);
+        await loadPrices();
+      } catch (err) {
+        alert(err.message || 'Error updating price');
+      }
+    }
+
+    function updateBadge(animal, isOpen) {
+      const badge = document.getElementById(`badge-${animal}`);
+      if (!badge) return;
+      if (isOpen) {
+        badge.innerText = '● Open';
+        badge.className = 'status-badge open';
+      } else {
+        badge.innerText = '● Closed';
+        badge.className = 'status-badge closed';
       }
     }
 
     async function loadBookingStatus() {
       try {
-        const res = await fetch('/api/admin/booking-status', {
-          headers: adminHeaders
-        });
+        const res = await fetch('/api/admin/booking-status', { headers: adminHeaders });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Failed to load status');
+        if (!res.ok) throw new Error(data.message || 'Failed');
 
-        updateAnimalUI('cow', data.cow_open);
-        updateAnimalUI('ram', data.ram_open);
-        updateAnimalUI('goat', data.goat_open);
+        updateBadge('cow', data.cow_open);
+        updateBadge('ram', data.ram_open);
+        updateBadge('goat', data.goat_open);
       } catch (error) {
         console.error("Unable to load booking status", error);
       }
@@ -278,46 +560,62 @@
 
     async function loadBookings() {
       try {
-        const res = await fetch('/api/admin/bookings', {
-          headers: adminHeaders
-        });
+        const res = await fetch('/api/admin/bookings', { headers: adminHeaders });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Failed to fetch bookings');
+        if (!res.ok) throw new Error(data.message || 'Failed');
 
-        bookingTableBody.innerHTML = '';
-        if (data.length === 0) {
-          emptyState.style.display = 'block';
-          return;
-        }
-
-        emptyState.style.display = 'none';
-        data.forEach(booking => {
-          const row = document.createElement('tr');
-          const date = new Date(booking.created_at).toLocaleString();
-          const isPaid = booking.payment_status === 'paid';
-          const paymentBadge = isPaid
-            ? `<span class="badge-paid">✔ Paid</span>`
-            : `<span class="badge-pending">⏳ Pending</span>`;
-          const actionBtn = isPaid
-            ? `<span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">Verified</span>`
-            : `<button class="confirm-pay-btn" onclick="markPaid(${booking.id}, this)">✔ Confirm Payment</button>`;
-
-          row.innerHTML = `
-            <td>${date}</td>
-            <td>${booking.user_id === 'admin' ? 'Admin' : booking.user_id}</td>
-            <td><a href="mailto:${booking.email}" style="color: #f0a060; text-decoration: none;">${booking.email}</a></td>
-            <td>${booking.animal_type}</td>
-            <td>${booking.name}</td>
-            <td>${booking.quarter_qty} / ${booking.half_qty} / ${booking.full_qty}</td>
-            <td><span class="amount">₦${Number(booking.total).toLocaleString()}</span></td>
-            <td>${paymentBadge}</td>
-            <td>${actionBtn}</td>
-          `;
-          bookingTableBody.appendChild(row);
-        });
+        allBookingsData = data;
+        renderBookings();
       } catch (error) {
-        bookingTableBody.innerHTML = '<tr><td colspan="6">Unable to load bookings.</td></tr>';
+        document.getElementById('bookingTableBody').innerHTML = '<tr><td colspan="11">Unable to load bookings.</td></tr>';
       }
+    }
+
+    function renderBookings() {
+      const tableBody = document.getElementById('bookingTableBody');
+      const emptyState = document.getElementById('emptyState');
+      tableBody.innerHTML = '';
+
+      const filtered = activeAnimal === 'all'
+        ? allBookingsData
+        : allBookingsData.filter(b => (b.animal_type || '').toLowerCase() === activeAnimal);
+
+      if (filtered.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      filtered.forEach(booking => {
+        const row = document.createElement('tr');
+        const date = new Date(booking.created_at).toLocaleString();
+        const isPaid = booking.payment_status === 'paid';
+        const paymentBadge = isPaid
+          ? `<span class="badge-paid">✔ Paid</span>`
+          : `<span class="badge-pending">⏳ Pending</span>`;
+        const actionBtn = isPaid
+          ? `<span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">Verified</span>`
+          : `<button class="confirm-pay-btn" onclick="markPaid(${booking.id}, this)">✔ Confirm Payment</button>`;
+
+        const subtotalVal = Number(booking.subtotal || booking.total || 0);
+        const feeVal = Number(booking.service_fee || 0);
+        const totalVal = Number(booking.total || 0);
+
+        row.innerHTML = `
+          <td>${date}</td>
+          <td>${booking.user_id === 'admin' ? 'Admin' : (booking.user_id || 'Guest')}</td>
+          <td><a href="mailto:${booking.email}" style="color: #f0a060; text-decoration: none;">${booking.email}</a></td>
+          <td style="text-transform: capitalize; font-weight: bold; color: #f0a060;">${booking.animal_type || 'cow'}</td>
+          <td>${booking.name}</td>
+          <td>${booking.quarter_qty}Q / ${booking.half_qty}H / ${booking.full_qty}F</td>
+          <td>₦${subtotalVal.toLocaleString()}</td>
+          <td>₦${feeVal.toLocaleString()}</td>
+          <td><span class="amount">₦${totalVal.toLocaleString()}</span></td>
+          <td>${paymentBadge}</td>
+          <td>${actionBtn}</td>
+        `;
+        tableBody.appendChild(row);
+      });
     }
 
     async function toggleAnimal(animalType, action) {
@@ -360,6 +658,7 @@
     }
 
     loadBookingStatus();
+    loadPrices();
     loadBookings();
   </script>
 </body>
