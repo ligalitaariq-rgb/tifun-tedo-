@@ -67,6 +67,27 @@ async function setAnimalBookingState(animalType, isOpen) {
   return data;
 }
 
+async function setAnimalPrice(animalType, fullPrice) {
+  const row = await ensureBookingControlRow();
+  const updateData = {};
+  const priceNum = Number(fullPrice);
+  if (isNaN(priceNum) || priceNum <= 0) throw new Error("Invalid price value");
+
+  if (animalType === 'cow') updateData.cow_price = priceNum;
+  if (animalType === 'ram') updateData.ram_price = priceNum;
+  if (animalType === 'goat') updateData.goat_price = priceNum;
+
+  const { data, error } = await supabase
+    .from("booking_controls")
+    .update(updateData)
+    .eq("id", row.id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
 async function getBookingControlState() {
   return await ensureBookingControlRow();
 }
@@ -190,6 +211,70 @@ app.post("/api/admin/booking-toggle", async (req, res) => {
     res.json({ message: `${animalType} bookings are now ${isOpen ? 'open' : 'closed'}`, state });
   } catch (err) {
     res.status(500).json({ message: err.message || "Database update required. Please run setup_database.sql in Supabase." });
+  }
+});
+
+// Public Endpoint to get current pricing for cow, ram, goat
+app.get("/api/prices", async (req, res) => {
+  try {
+    const state = await getBookingControlState().catch(() => ({}));
+    const cowFull = Number(state.cow_price) || 13000;
+    const ramFull = Number(state.ram_price) || 25000;
+    const goatFull = Number(state.goat_price) || 25000;
+
+    res.json({
+      cow: {
+        full: cowFull,
+        half: Math.round(cowFull / 2),
+        quarter: Math.round(cowFull / 4)
+      },
+      ram: {
+        full: ramFull,
+        half: Math.round(ramFull / 2),
+        quarter: Math.round(ramFull / 4)
+      },
+      goat: {
+        full: goatFull,
+        half: Math.round(goatFull / 2),
+        quarter: Math.round(goatFull / 4)
+      }
+    });
+  } catch (err) {
+    res.json({
+      cow: { full: 13000, half: 6500, quarter: 3250 },
+      ram: { full: 25000, half: 12250, quarter: 6250 },
+      goat: { full: 25000, half: 12250, quarter: 6250 }
+    });
+  }
+});
+
+// Admin Endpoint to update price for an animal
+app.post("/api/admin/price-update", async (req, res) => {
+  try {
+    if (!isAdminRequest(req)) return res.status(403).json({ message: "Admin credentials required" });
+
+    const { animalType, fullPrice } = req.body;
+    if (!['cow', 'ram', 'goat'].includes(animalType)) {
+      return res.status(400).json({ message: "Invalid animal type" });
+    }
+    const priceNum = Number(fullPrice);
+    if (!priceNum || priceNum <= 0) {
+      return res.status(400).json({ message: "Please enter a valid positive price" });
+    }
+
+    const state = await setAnimalPrice(animalType, priceNum);
+    const updatedFull = priceNum;
+    res.json({
+      message: `${animalType.toUpperCase()} price updated successfully to ₦${updatedFull.toLocaleString()}!`,
+      pricing: {
+        full: updatedFull,
+        half: Math.round(updatedFull / 2),
+        quarter: Math.round(updatedFull / 4)
+      },
+      state
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Failed to update price in database." });
   }
 });
 
