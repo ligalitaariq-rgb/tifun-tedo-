@@ -291,6 +291,11 @@ h1 {
       <span id="detailFull">-</span>
     </div>
 
+    <div id="serviceFeeSection" style="display:none;" class="detail-row">
+      <span>Service Fee (0.77%):</span>
+      <span id="detailServiceFee">-</span>
+    </div>
+
     <div class="total-row">
       <span>Total Amount:</span>
       <span id="detailTotal">-</span>
@@ -360,6 +365,11 @@ if (booking.half_qty > 0) {
 if (booking.full_qty > 0) {
   document.getElementById('fullSection').style.display = 'flex';
   document.getElementById('detailFull').innerText = `${booking.full_qty} × ₦${prices.full.toLocaleString()} = ₦${(booking.full_qty * prices.full).toLocaleString()}`;
+}
+
+if (booking.service_fee && booking.service_fee > 0) {
+  document.getElementById('serviceFeeSection').style.display = 'flex';
+  document.getElementById('detailServiceFee').innerText = '₦' + booking.service_fee.toLocaleString();
 }
 </script>
 
