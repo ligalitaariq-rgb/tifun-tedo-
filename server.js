@@ -217,11 +217,14 @@ app.post("/api/admin/confirm-payment/:id", async (req, res) => {
 // =====================
 app.post("/api/book", async (req, res) => {
   try {
-    const { userId, name, email, animalType, quarter = 0, half = 0, full = 0, total } = req.body;
+    const { userId, name, email, animalType, quarter = 0, half = 0, full = 0, subtotal: reqSubtotal, service_fee: reqServiceFee, total } = req.body;
 
     if (!userId || !name || !email || total <= 0) {
       return res.status(400).json({ message: "Invalid booking data (Name and Email are required)" });
     }
+
+    const computedSubtotal = reqSubtotal || total;
+    const computedServiceFee = reqServiceFee !== undefined ? reqServiceFee : Math.round(computedSubtotal * 0.0077);
 
     const controlState = await getBookingControlState();
     const animalToCheck = animalType || 'cow';
@@ -251,7 +254,10 @@ app.post("/api/book", async (req, res) => {
           quarter_qty: quarter,
           half_qty: half,
           full_qty: full,
+          subtotal: computedSubtotal,
+          service_fee: computedServiceFee,
           total,
+          second_account_note: 'UBA - 2233156875',
           payment_status: 'pending',
           created_at: new Date().toISOString()
         }
