@@ -103,19 +103,58 @@ body {
 .nav-links {
   margin-top: 50px;
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 1000px;
 }
 
-.nav-links a {
-  color: #f0a060;
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
   text-decoration: none;
-  font-weight: 600;
-  transition: opacity 0.2s;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
 }
 
-.nav-links a:hover {
-  opacity: 0.8;
-  text-decoration: underline;
+.nav-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  opacity: 1;
+}
+
+.nav-btn:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.btn-history {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.btn-developer {
+  background: linear-gradient(135deg, #ea580c, #f97316);
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.btn-support {
+  background: linear-gradient(135deg, #15803d, #22c55e);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.btn-admin {
+  background: linear-gradient(135deg, #7e22ce, #a855f7);
+  border-color: rgba(168, 85, 247, 0.4);
 }
 
 .user-welcome {
@@ -272,10 +311,18 @@ body {
 </div>
 
 <div class="nav-links">
-  <a href="history.html">View My Booking History</a>
-  <a href="about developer .html">About Developer</a>
-  <a href="tel:08058462020" style="color: #ff9d5c;">Customer Care: 08058462020</a>
-  <a id="adminDashboardLink" href="admin.html" style="display:none;">Admin Dashboard</a>
+  <a href="history.html" class="nav-btn btn-history">
+    <span>📋</span> View My Booking History
+  </a>
+  <a href="about developer .html" class="nav-btn btn-developer">
+    <span>👨‍💻</span> About Developer
+  </a>
+  <a href="https://wa.me/2348058462020?text=hello%20admin%20%21%21%21%0Ai%20gut%20some%20issues%20during%20booking" target="_blank" class="nav-btn btn-support">
+    <span>💬</span> Contact Support
+  </a>
+  <a id="adminDashboardLink" href="admin.html" class="nav-btn btn-admin" style="display:none;">
+    <span>⚙️</span> Admin Dashboard
+  </a>
 </div>
 
 <script>
@@ -285,7 +332,7 @@ if (!user) {
 } else {
   document.getElementById('welcomeName').innerText = 'Hello, ' + user.username;
   if (user.isAdmin) {
-    document.getElementById('adminDashboardLink').style.display = 'inline-block';
+    document.getElementById('adminDashboardLink').style.display = 'inline-flex';
   }
 }
 
