@@ -475,7 +475,7 @@
     <label>Select Slot Types & Quantities</label>
     <div class="slots">
       <div class="slot-group">
-        <div class="slot" data-type="quarter" onclick="toggleSlot('quarter')">Quarter<br><small>₦6,250</small></div>
+        <div class="slot" data-type="quarter" onclick="toggleSlot('quarter')">Quarter<br><small id="priceBadgeQuarter">₦6,250</small></div>
         <div class="slot-counter" id="quarterCounter" style="display:none;">
           <button type="button" onclick="changeQty('quarter', -1)">−</button>
           <span id="quarterQty">1</span>
@@ -483,7 +483,7 @@
         </div>
       </div>
       <div class="slot-group">
-        <div class="slot" data-type="half" onclick="toggleSlot('half')">Half<br><small>₦12,250</small></div>
+        <div class="slot" data-type="half" onclick="toggleSlot('half')">Half<br><small id="priceBadgeHalf">₦12,250</small></div>
         <div class="slot-counter" id="halfCounter" style="display:none;">
           <button type="button" onclick="changeQty('half', -1)">−</button>
           <span id="halfQty">1</span>
@@ -491,7 +491,7 @@
         </div>
       </div>
       <div class="slot-group">
-        <div class="slot" data-type="full" onclick="toggleSlot('full')">Full<br><small>₦25,000</small></div>
+        <div class="slot" data-type="full" onclick="toggleSlot('full')">Full<br><small id="priceBadgeFull">₦25,000</small></div>
         <div class="slot-counter" id="fullCounter" style="display:none;">
           <button type="button" onclick="changeQty('full', -1)">−</button>
           <span id="fullQty">1</span>
@@ -521,8 +521,7 @@
     <button class="confirm-btn" onclick="confirmBooking()">Confirm Reservation</button>
     <div id="booking-confermation"></div>
     <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: #666;">
-      Need help? <a href="tel:08058462020" style="color: #005c5c; text-decoration: none; font-weight: 600;">Call
-        Customer Care: 08058462020</a>
+      Need help? <a href="https://wa.me/2348058462020?text=hello%20admin%20%21%21%21%0Ai%20gut%20some%20issues%20during%20booking" target="_blank" style="color: #15803d; text-decoration: none; font-weight: 700;">💬 Contact Support on WhatsApp</a>
     </div>
   </div>
 
@@ -570,6 +569,27 @@
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) window.location.href = 'index.html';
+
+    async function loadLivePrices() {
+      try {
+        const res = await fetch('/api/prices');
+        const data = await res.json();
+        if (data.ram) {
+          prices.full = data.ram.full;
+          prices.half = data.ram.half;
+          prices.quarter = data.ram.quarter;
+
+          document.getElementById('priceBadgeQuarter').innerText = '₦' + prices.quarter.toLocaleString();
+          document.getElementById('priceBadgeHalf').innerText = '₦' + prices.half.toLocaleString();
+          document.getElementById('priceBadgeFull').innerText = '₦' + prices.full.toLocaleString();
+
+          updateSummary();
+        }
+      } catch (err) {
+        console.error("Could not fetch live prices", err);
+      }
+    }
+    loadLivePrices();
 
     function toggleSlot(type) {
       const slot = document.querySelector(`[data-type="${type}"]`);
