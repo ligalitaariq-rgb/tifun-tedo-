@@ -415,14 +415,10 @@
       <thead>
         <tr>
           <th>Date</th>
-          <th>User</th>
-          <th>Email</th>
           <th>Animal</th>
           <th>Name</th>
           <th>Q / H / F</th>
           <th>Subtotal</th>
-          <th>Fee (0.77%)</th>
-          <th>Total</th>
           <th>Payment</th>
           <th>Action</th>
         </tr>
@@ -567,7 +563,7 @@
         allBookingsData = data;
         renderBookings();
       } catch (error) {
-        document.getElementById('bookingTableBody').innerHTML = '<tr><td colspan="11">Unable to load bookings.</td></tr>';
+        document.getElementById('bookingTableBody').innerHTML = '<tr><td colspan="7">Unable to load bookings.</td></tr>';
       }
     }
 
@@ -598,19 +594,13 @@
           : `<button class="confirm-pay-btn" onclick="markPaid(${booking.id}, this)">✔ Confirm Payment</button>`;
 
         const subtotalVal = Number(booking.subtotal || booking.total || 0);
-        const feeVal = Number(booking.service_fee || 0);
-        const totalVal = Number(booking.total || 0);
 
         row.innerHTML = `
           <td>${date}</td>
-          <td>${booking.user_id === 'admin' ? 'Admin' : (booking.user_id || 'Guest')}</td>
-          <td><a href="mailto:${booking.email}" style="color: #f0a060; text-decoration: none;">${booking.email}</a></td>
           <td style="text-transform: capitalize; font-weight: bold; color: #f0a060;">${booking.animal_type || 'cow'}</td>
           <td>${booking.name}</td>
           <td>${booking.quarter_qty}Q / ${booking.half_qty}H / ${booking.full_qty}F</td>
           <td>₦${subtotalVal.toLocaleString()}</td>
-          <td>₦${feeVal.toLocaleString()}</td>
-          <td><span class="amount">₦${totalVal.toLocaleString()}</span></td>
           <td>${paymentBadge}</td>
           <td>${actionBtn}</td>
         `;
