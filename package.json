@@ -1,17 +1,17 @@
 {
-  "name": "tifun-tedo-backend",
+  "name": "tifun-tedo-admin",
   "version": "1.0.0",
-  "main": "server.js",
+  "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.105.3",
-    "axios": "^1.13.2",
-    "bcryptjs": "^3.0.3",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
     "express": "^4.18.2",
-    "mongoose": "^8.0.0"
+    "@supabase/supabase-js": "^2.10.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
